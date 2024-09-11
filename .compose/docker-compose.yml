@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mysql-database-multirubro:
+    image: mysql:latest
+    container_name: mysql-database-moderations
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: moderations
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql_data_moderations:/var/lib/mysql_moderations
+    networks:
+      - moderations-network
+
+
+networks:
+  moderations-network:
+    driver: bridge

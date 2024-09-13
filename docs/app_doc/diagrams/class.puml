@@ -1,7 +1,78 @@
 @startuml
 
-class PingController {
-  + ping(): String
+entity "Claim" as claim {
+  + claim_id : INT <<PK>>
+  + user_id : INT <<FK>>
+  + sancion_type_id : INT <<FK>>
+  + created_date : LocalDateTime
+  + last_modified_at : LocalDateTime
+  + last_modified_by : VARCHAR(255)
+  + created_by : VARCHAR(255)  // Who made the claim
+  + expiration_date : LocalDateTime
+  + state : ENUM("ENVIADO", "ENREVISIÓN", "APELADO", "APROBADO", "RECHAZADO")
+
+
+  }
+
+entity "SancionType" as sancion_type {
+  + sancion_type_id : INT <<PK>>
+  + name : VARCHAR(255)  // ("Construction Violation","Noise Disturbance","Traffic Violation","Payment Violation","Commercial Activity Violation","Property Damage","Other")
+  + description : TEXT
+  + created_date : LocalDateTime
+  + last_modified_at : LocalDateTime
+  + last_modified_by : VARCHAR(255)
+  + created_by : VARCHAR(255) // Optional detailed description of the sanction type
+}
+entity "Proof" as proof {
+  + proof_id : INT <<PK>>
+  + claim_id : INT <<FK>> // Link to the related claim
+  + infraction_id : INT <<FK>>
+  + proof_type : ENUM("TEXT", "IMAGE", "DOCUMENT")  // Type of proof
+  + proof_text : TEXT  // If the proof is textual
+  + proof_file_path : VARCHAR(255)  // File path for image or document proof
+  + created_date : LocalDateTime
+  + last_modified_at : LocalDateTime
+  + last_modified_by : VARCHAR(255)
+  + created_by : VARCHAR(255)
+  + proof_context : ENUM("CLAIM_JUSTIFICATION", "DEFENSE")
 }
 
+entity "Infraction" as infraction {
+  + infraction_id : INT <<PK>>
+  + user_id : INT <<FK>>  // The person being infracted
+  + sancion_type_id : INT <<FK>>  // Link to SancionType table
+  + created_date : LocalDateTime
+  + last_modified_at : LocalDateTime
+  + last_modified_by : VARCHAR(255)
+  + created_by : VARCHAR(255)
+  + sancion_type_id : INT <<FK>>
+  + proof_submission_deadline : LocalDateTime
+  + state : ENUM("APROBADA", "EN APELACION", "APELADA", "APROBADA", "RECHAZADA")
+}
+
+entity "Moderation" as moderation {
+  + moderation_id : INT <<PK>>
+  + user_id : INT <<FK>>  // The person being moderated
+  + sancion_type_id : INT <<FK>>  // Link to SancionType table
+  + infraction_id : INT <<FK>>  // Link to related infraction
+  + created_date : LocalDateTime
+  + last_modified_at : LocalDateTime
+  + last_modified_by : VARCHAR(255)
+  + created_by : VARCHAR(255)
+  + state : ENUM("EN ASAMBLEA", "APROBADA", "RECHAZADA", "IMPUTADA EN EXPENSA")
+  + price : DECIMAL(10,2)
+  + approved_by_assembly : BOOLEAN
+}
+
+claim ||--|| sancion_type : "References"
+
+moderation ||--|| sancion_type : "References"
+claim ||--o{ proof : "has"
+infraction ||--o{ claim : "contains"
+infraction ||--|| sancion_type : "References"
+infraction ||--o{ proof : "has"
+moderation ||--o{ infraction : "includes"
+
+
 @enduml
+

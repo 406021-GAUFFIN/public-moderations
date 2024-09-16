@@ -22,6 +22,7 @@ entity "SancionType" as sancion_type {
   + last_modified_at : LocalDateTime
   + last_modified_by : VARCHAR(255)
   + created_by : VARCHAR(255) // Optional detailed description of the sanction type
+  + severity_level : ENUM("LOW", "MEDIUM", "HIGH")
 }
 entity "Proof" as proof {
   + proof_id : INT <<PK>>

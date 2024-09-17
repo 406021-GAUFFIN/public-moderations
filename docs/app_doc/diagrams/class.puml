@@ -50,7 +50,15 @@ entity "Infraction" as infraction {
   + proof_submission_deadline : LocalDateTime
   + state : ENUM("APROBADA", "EN APELACION", "APELADA", "APROBADA", "RECHAZADA")
 }
+entity "Log" as log {
+  + log_id : INT <<PK>>
+  + text : VARCHAR(255)
+  + created_by : VARCHAR(255)
+  + created_date : DATE
+  + last_modified_by : LocalDateTime
+  + last_modified_date : LocalDateTime
 
+}
 entity "Moderation" as moderation {
   + moderation_id : INT <<PK>>
   + user_id : INT <<FK>>  // The person being moderated

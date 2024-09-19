@@ -1,6 +1,5 @@
 package ar.edu.utn.frc.tup.lc.iv.entities;
 
-import ar.edu.utn.frc.tup.lc.iv.entities.audit.LogEntity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.MappedSuperclass;
@@ -67,41 +66,8 @@ public class BaseEntity {
     private String lastUpdatedBy;
 
 
-    /**
-     * Transient field to hold the username for logging purposes.
-     */
-    @Transient
-    private String userName;
-
-    /**
-     * Transient field to hold log information for the entity.
-     */
-    @Transient
-    private String log;
 
 
-    /**
-     * Hook method that is called before the entity is persisted.
-     * Creates a log entry if logging is enabled.
-     */
-    @PrePersist
-    protected void onCreate() {
-        if (shouldLog()) {
-            createLog(this.userName, this.log);
-        }
-
-    }
-
-    /**
-     * Hook method that is called before the entity is updated.
-     * Creates a log entry if logging is enabled.
-     */
-    @PreUpdate
-    protected void onUpdate() {
-        if (shouldLog()) {
-            createLog(this.userName, this.log);
-        }
-    }
 
     /**
      * Creates a log entry for the entity.
@@ -114,13 +80,5 @@ public class BaseEntity {
         throw new NotImplementedException();
     }
 
-    /**
-     * Determines if logging should be performed.
-     * Logging is not performed for instances of {@link LogEntity}.
-     *
-     * @return true if logging should be performed; false otherwise
-     */
-    private boolean shouldLog() {
-        return  !(this instanceof LogEntity);
-    }
+
 }

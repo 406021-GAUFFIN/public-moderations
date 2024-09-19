@@ -64,21 +64,6 @@ public class BaseEntity {
      */
     @Column(name = "LAST_UPDATED_BY")
     private String lastUpdatedBy;
-
-
-
-
-
-    /**
-     * Creates a log entry for the entity.
-     * @param userNameParam the username associated with
-     *                 the log entry
-     * @param logParam the log message
-     */
-    private void createLog(String userNameParam, String logParam) {
-        System.out.println(userNameParam + ": " + logParam);
-        throw new NotImplementedException();
-    }
-
+    
 
 }

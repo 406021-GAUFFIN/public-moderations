@@ -6,14 +6,10 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -64,6 +60,6 @@ public class BaseEntity {
      */
     @Column(name = "LAST_UPDATED_BY")
     private String lastUpdatedBy;
-    
+
 
 }

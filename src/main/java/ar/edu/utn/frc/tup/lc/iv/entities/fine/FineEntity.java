@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.tup.lc.iv.entities.moderation;
+package ar.edu.utn.frc.tup.lc.iv.entities.fine;
 
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ModerationState;
@@ -49,12 +49,6 @@ public class FineEntity extends BaseEntity {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    /**
-     * Indicates whether the moderation
-     * was approved by the assembly.
-     */
-    @Column(name = "APPROVED_BY_ASSEMBLY")
-    private Boolean approvedByAssembly;
 
     /**
      * The price associated with the moderation process.

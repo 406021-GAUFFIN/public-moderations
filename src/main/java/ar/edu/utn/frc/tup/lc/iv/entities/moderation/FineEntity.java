@@ -26,16 +26,16 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = ModerationEntity.TABLE_NAME)
+@Table(name = FineEntity.TABLE_NAME)
 @Setter
 @Getter
 @NoArgsConstructor
-public class ModerationEntity extends BaseEntity {
+public class FineEntity extends BaseEntity {
 
     /**
      * Name of the table on the database.
      */
-    static final String TABLE_NAME = "MODERATION";
+    static final String TABLE_NAME = "FINE";
 
     /**
      * The ID of the user associated with the moderation process.

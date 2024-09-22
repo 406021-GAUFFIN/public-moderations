@@ -5,7 +5,7 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.InfractionState;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.claim.ClaimEntity;
-import ar.edu.utn.frc.tup.lc.iv.entities.moderation.ModerationEntity;
+import ar.edu.utn.frc.tup.lc.iv.entities.moderation.FineEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToOne;
@@ -77,7 +77,7 @@ public class InfractionEntity extends BaseEntity {
      */
     @ManyToOne
     @JoinColumn(name = "MODERATION_ID", referencedColumnName = "id")
-    private ModerationEntity moderation;
+    private FineEntity moderation;
 
 
 }

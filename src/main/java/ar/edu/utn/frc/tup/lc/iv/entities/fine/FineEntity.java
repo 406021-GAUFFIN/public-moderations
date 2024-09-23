@@ -5,15 +5,7 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ModerationState;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -67,7 +59,7 @@ public class FineEntity extends BaseEntity {
     /**
      * The type of sanction linked to the moderation process.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
     private SanctionTypeEntity sanctionTypeEntity;
 

@@ -17,7 +17,7 @@ public class Infraction extends BaseModel{
     /**
      * The ID of the user who committed the infraction.
      */
-    private Integer userId;
+    private Long plotId;
 
     /**
      * A description of the infraction.

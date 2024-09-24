@@ -1,7 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iv.entities.fine;
 
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ModerationState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
@@ -30,38 +30,27 @@ public class FineEntity extends BaseEntity {
     static final String TABLE_NAME = "FINE";
 
     /**
-     * The ID of the user associated with the moderation process.
+     * The ID of the plot associated with the moderation process.
      */
-    @Column(name = "USER_ID")
-    private Integer userId;
-
-    /**
-     * A description of the moderation process.
-     */
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name = "PLOT_ID")
+    private Integer plotId;
 
 
-    /**
-     * The price associated with the moderation process.
-     */
-    @Column(name = "PRICE")
-    private Double price;
 
     /**
      * The current state of the moderation
-     * process, represented by {@link ModerationState}.
+     * process, represented by {@link FineState}.
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "MODERATION_STATE")
-    private ModerationState moderationState;
+    @Column(name = "FINE_STATE")
+    private FineState fineState;
 
     /**
      * The type of sanction linked to the moderation process.
      */
     @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
-    private SanctionTypeEntity sanctionTypeEntity;
+    private SanctionTypeEntity sanctionType;
 
     /**
      * The list of infractions associated

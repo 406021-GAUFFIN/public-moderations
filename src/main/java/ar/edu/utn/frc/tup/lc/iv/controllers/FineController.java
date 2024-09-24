@@ -2,8 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.controllers;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
-import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ModerationState;
-import ar.edu.utn.frc.tup.lc.iv.models.SanctionType;
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,13 +59,13 @@ public class FineController {
     public ResponseEntity<Page<FineDTO>> getFines(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) List< ModerationState> moderationState,
-            @RequestParam(required = false) List< SanctionType> sanctionType,
+            @RequestParam(required = false) List<FineState> fineState,
+            @RequestParam(required = false) List< Long> sanctionTypes,
             @RequestParam(required = false) Double price
 
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(fineService.getAllFines(pageable, moderationState, sanctionType,price ), HttpStatus.OK) ;
+        return new ResponseEntity<>(fineService.getAllFines(pageable, fineState, sanctionTypes,price ), HttpStatus.OK) ;
     }
 
     /**

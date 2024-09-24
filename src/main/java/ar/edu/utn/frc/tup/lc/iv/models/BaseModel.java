@@ -22,12 +22,12 @@ public class BaseModel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime createdDate;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime lastUpdatedAt;
 
-    private String lastUpdatedBy;
+    private Long lastUpdatedBy;
 
 
 }

@@ -1,10 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
-import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ModerationState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.models.Fine;
-import ar.edu.utn.frc.tup.lc.iv.models.SanctionType;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 
@@ -18,12 +17,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineSpecification.inModerationState;
-import static ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineSpecification.price;
+import static ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineSpecification.*;
 
 @Service
 public class FineServiceImpl implements FineService {
@@ -37,11 +34,12 @@ public class FineServiceImpl implements FineService {
     private ObjectMapper objectMapper;
 
     @Override
-    public Page<FineDTO> getAllFines(Pageable pageable, List<ModerationState> moderationState, List<SanctionType> sanctionType, Double price) {
+    public Page<FineDTO> getAllFines(Pageable pageable, List<FineState> fineState, List<Long> sanctionTypes, Double price) {
 
 
         Specification<FineEntity> filters = Specification.where(price==null? null:  price(price))
-                .and(CollectionUtils.isEmpty(moderationState) ? null : inModerationState(moderationState));
+                .and(CollectionUtils.isEmpty(fineState) ? null : inModerationState(fineState))
+        .and(CollectionUtils.isEmpty(sanctionTypes) ? null : inSanctionType(sanctionTypes));
 
         Page<FineEntity> fineEntityPage = fineJpaRepository.findAll(filters, pageable);
 

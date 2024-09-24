@@ -40,10 +40,10 @@ public class InfractionEntity extends BaseEntity {
     static final String TABLE_NAME = "INFRACTION";
 
     /**
-     * The ID of the user who committed the infraction.
+     * The ID of the plot who committed the infraction.
      */
-    @Column(name = "USER_ID")
-    private Integer userId;
+    @Column(name = "PLOT_ID")
+    private Long plotId;
 
     /**
      * A description of the infraction.

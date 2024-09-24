@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
+import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.models.Fine;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +56,12 @@ public class FineController {
             )
     })
     @GetMapping("pageable/fine")
-    public Page<Fine> getFines(
+    public ResponseEntity<Page<FineDTO>> getFines(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return fineService.getAllFines(pageable);
+        return new ResponseEntity<>(fineService.getAllFines(pageable), HttpStatus.OK) ;
     }
 
     /**
@@ -86,10 +88,9 @@ public class FineController {
             )
     })
     @GetMapping("fine/{id}")
-    public Fine getFineById(
+    public ResponseEntity<FineDTO> getFineById(
             @PathVariable Long id
     ) {
-
-        return fineService.getById(id);
+        return new ResponseEntity<>(fineService.getById(id), HttpStatus.OK);
     }
 }

@@ -5,9 +5,12 @@ import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.claim.ClaimEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
-
+@Getter
+@Setter
 public class Infraction extends BaseModel{
 
 

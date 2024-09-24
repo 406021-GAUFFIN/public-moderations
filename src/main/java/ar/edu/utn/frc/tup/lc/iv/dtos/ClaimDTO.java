@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class ClaimDTO {
+public class ClaimDTO extends BaseDTO {
 
     private Integer userId;
 

@@ -76,8 +76,8 @@ public class InfractionEntity extends BaseEntity {
      * The moderation process linked to the infraction.
      */
     @ManyToOne
-    @JoinColumn(name = "MODERATION_ID", referencedColumnName = "id")
-    private FineEntity moderation;
+    @JoinColumn(name = "FINE_ID", referencedColumnName = "id")
+    private FineEntity fine;
 
 
 }

@@ -14,4 +14,6 @@ public interface FineService {
     Page<Fine> getAllFines(Pageable pageable);
 
 
+    Fine getById(Long id);
+
 }

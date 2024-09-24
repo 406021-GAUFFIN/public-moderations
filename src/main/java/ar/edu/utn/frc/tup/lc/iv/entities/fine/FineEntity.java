@@ -67,7 +67,7 @@ public class FineEntity extends BaseEntity {
      * The list of infractions associated
      * with the moderation process.
      */
-    @OneToMany(mappedBy = "moderation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fine",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<InfractionEntity> infractions;
 
 }

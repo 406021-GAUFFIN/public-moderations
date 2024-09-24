@@ -59,6 +59,9 @@
             <version>${springdoc-openapi.version}</version>
         </dependency>
 
+
+
+
         <!--    Lombok    -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -86,6 +89,10 @@
             <version>8.0.33</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
 
     </dependencies>
 

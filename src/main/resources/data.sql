@@ -8,7 +8,7 @@ INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by, description , moderation_state , price, user_id , sanction_type )VALUES
     (2000, 'john_doe', '2024-06-12 10:00:00', '2024-06-12 10:00:00', 'john_doe', 'Molestaba', 'ON_ASSEMBLY', 10000, 1, 999);
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by, description , moderation_state , price, user_id , sanction_type )VALUES
-    (1001, 'john_doe', '2024-06-12 10:00:00', '2024-06-12 10:00:00', 'john_doe', 'Molestaba', 'ON_ASSEMBLY', 10000, 1, 999);
+    (1001, 'john_doe', '2024-06-12 10:00:00', '2024-06-12 10:00:00', 'john_doe', 'Molestaba', 'APPROVED', 10000, 1, 999);
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by, description , moderation_state , price, user_id , sanction_type )VALUES
     (1002, 'john_doe', '2024-06-12 10:00:00', '2024-06-12 10:00:00', 'john_doe', 'Molestaba', 'ON_ASSEMBLY', 10000, 1, 999);
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by, description , moderation_state , price, user_id , sanction_type )VALUES

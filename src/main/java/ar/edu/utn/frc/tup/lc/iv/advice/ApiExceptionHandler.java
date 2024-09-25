@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.advice;
 
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,27 @@ public class ApiExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles validation errors for method arguments.
+     *
+     * @param ex the exception with validation errors.
+     * @return a {@link ResponseEntity} with an {@link ErrorApi} object,
+     *         status {@code 404 Not Found}, and validation error details.
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorApi> handleNotFoundExceptiob(EntityNotFoundException ex) {
+        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        ErrorApi error = ErrorApi.builder()
+                .timestamp(timeStamp)
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 }

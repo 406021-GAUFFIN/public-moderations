@@ -46,7 +46,7 @@ public class BaseEntity {
      * Username of the person who created the entity.
      */
     @Column(name = "CREATED_BY")
-    private String createdBy;
+    private Long createdBy;
 
     /**
      * Date and time when the entity was last updated.
@@ -59,7 +59,7 @@ public class BaseEntity {
      * Username of the person who last updated the entity.
      */
     @Column(name = "LAST_UPDATED_BY")
-    private String lastUpdatedBy;
+    private Long lastUpdatedBy;
 
 
 }

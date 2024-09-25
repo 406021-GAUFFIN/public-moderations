@@ -2,17 +2,19 @@ package ar.edu.utn.frc.tup.lc.iv.models;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ClaimState;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
-import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+/**
+ * Claim made by neighbors.
+ */
+@NoArgsConstructor
 @Getter
 @Setter
-public class Claim extends BaseModel{
-
+public class Claim extends BaseModel {
 
     /**
      * The ID of the user who made the claim.

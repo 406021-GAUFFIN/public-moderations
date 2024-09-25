@@ -15,12 +15,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 /**
- * Ping controller class to health check.
+ * Fine controller class to manage fines.
  */
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -28,15 +32,22 @@ import java.util.List;
 @RestController
 public class FineController {
 
+    /**
+     * Service to manage fines.
+     */
     @Autowired
     private
     FineService fineService;
 
     /**
-     * Get all fines
-     *
-     * @return paginated fines
+     * Get all fines.
+     * @param page number of current page
+     * @param size size of page
+     * @param fineState array of states to filter
+     * @param sanctionTypes array of sanction types to filter
+     * @return paginated fines.
      */
+
     @Operation(
             summary = "Get all fines",
             description = "Get all fines")
@@ -56,22 +67,19 @@ public class FineController {
             )
     })
     @GetMapping("pageable/fine")
-    public ResponseEntity<Page<FineDTO>> getFines(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) List<FineState> fineState,
-            @RequestParam(required = false) List< Long> sanctionTypes,
-            @RequestParam(required = false) Double price
-
-    ) {
+    public ResponseEntity<Page<FineDTO>> getFines(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size,
+                                                  @RequestParam(required = false) List<FineState> fineState,
+                                                  @RequestParam(required = false) List<Long> sanctionTypes) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(fineService.getAllFines(pageable, fineState, sanctionTypes,price ), HttpStatus.OK) ;
+        return new ResponseEntity<>(fineService.getAllFines(pageable, fineState, sanctionTypes), HttpStatus.OK);
     }
 
     /**
-     * Get fine by id
+     * Get fine by id.
      *
-     * @return fine
+     * @param id id of the fine to get
+     * @return fine.
      */
     @Operation(
             summary = "Get one fine",

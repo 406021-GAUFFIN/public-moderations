@@ -80,7 +80,13 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-
+    /**
+     * Handles validation errors for method arguments.
+     *
+     * @param ex the exception with validation errors.
+     * @return a {@link ResponseEntity} with an {@link ErrorApi} object,
+     *         status {@code 404 Not Found}, and validation error details.
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorApi> handleNotFoundExceptiob(EntityNotFoundException ex) {
         String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

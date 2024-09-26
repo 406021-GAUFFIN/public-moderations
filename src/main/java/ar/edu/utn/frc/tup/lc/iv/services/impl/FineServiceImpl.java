@@ -2,8 +2,11 @@ package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.models.CreateFine;
 import ar.edu.utn.frc.tup.lc.iv.models.Fine;
+import ar.edu.utn.frc.tup.lc.iv.models.SanctionType;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 
@@ -63,6 +66,28 @@ public class FineServiceImpl implements FineService {
 
 
         return fineDTO;
+    }
+
+    @Override
+    public FineDTO postFine(CreateFine request) {
+        FineEntity fineEntity = new FineEntity();
+        fineEntity.setPlotId(request.plotId);
+        for (FineState fineState: FineState.values())
+        {
+            if(fineState.getId() == request.fineState )
+                fineEntity.setFineState(fineState);
+        }
+
+        SanctionTypeEntity sancion = new SanctionTypeEntity();
+        //sancion = SanctionTypeService.findById(request.idSanctionType);
+        //Optional<FineEntity> fineEntity = fineJpaRepository.findById(id);
+
+        fineEntity.setSanctionType(null);
+        fineEntity = fineJpaRepository.save(fineEntity);
+
+        Fine fineModel = modelMapper.map(fineEntity,Fine.class);
+        FineDTO fineDTO = modelMapper.map(fineEntity,FineDTO.class);
+    return  fineDTO;
     }
 
 }

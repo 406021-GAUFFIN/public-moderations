@@ -3,6 +3,8 @@ package ar.edu.utn.frc.tup.lc.iv.controllers;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.models.CreateFine;
+import ar.edu.utn.frc.tup.lc.iv.models.Fine;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -97,4 +99,43 @@ public class FineController {
     ) {
         return new ResponseEntity<>(fineService.getById(id), HttpStatus.OK);
     }
+
+
+
+    /**
+     * Post  fine
+     * @param request
+     *
+     *
+     */
+    @Operation(
+            summary = "Post  fine",
+            description = "Post  fine")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successful operation",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorApi.class))
+            )
+    })
+    @PostMapping("fine")
+    public ResponseEntity<FineDTO> postFine(
+            @RequestBody CreateFine request
+            ) {
+        FineDTO dto = fineService.postFine(request);
+        if(dto == null)
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        else
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+
 }

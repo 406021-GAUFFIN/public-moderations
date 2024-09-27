@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.advice;
 
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
+import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -104,6 +105,20 @@ public class ApiExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidClaimStateException.class)
+    public ResponseEntity<ErrorApi> handleInvalidClaimStateException(InvalidClaimStateException ex) {
+        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+
+        ErrorApi error = ErrorApi.builder()
+                .timestamp(timeStamp)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }

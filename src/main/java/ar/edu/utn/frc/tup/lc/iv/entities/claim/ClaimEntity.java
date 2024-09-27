@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 
 /**
@@ -37,7 +36,9 @@ public class ClaimEntity extends BaseEntity {
     static final String TABLE_NAME = "CLAIM";
 
 
-
+    /**
+     * The ID of the plot who is sent the claim.
+     */
     @Column(name = "PLOT_ID")
     private Integer plotId;
 

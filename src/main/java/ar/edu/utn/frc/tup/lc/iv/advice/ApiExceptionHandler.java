@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 /**
@@ -107,6 +106,12 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles {@link InvalidClaimStateException} with a 400 Bad Request response.
+     *
+     * @param ex The thrown exception.
+     * @return A 400 error response with details.
+     */
     @ExceptionHandler(InvalidClaimStateException.class)
     public ResponseEntity<ErrorApi> handleInvalidClaimStateException(InvalidClaimStateException ex) {
         String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));

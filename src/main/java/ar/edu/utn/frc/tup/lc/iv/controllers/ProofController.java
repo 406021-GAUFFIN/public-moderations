@@ -1,11 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
-
 import ar.edu.utn.frc.tup.lc.iv.dtos.ProofClaimRequestDto;
 import ar.edu.utn.frc.tup.lc.iv.dtos.ProofResponseDto;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.services.ProofService;
-import ar.edu.utn.frc.tup.lc.iv.services.impl.ProofServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller for managing proof operations.
@@ -26,21 +28,19 @@ import org.springframework.web.bind.annotation.*;
 public class ProofController {
 
     /**
-     * Service for handling proof logic.
+     * ProofService dependency.
      */
     private final ProofService proofService;
-
 
     /**
      * Creates a proof for an existing claim based on the provided request DTO.
      *
-     * @param proofClaimRequestDto The data transfer object containing proof details
-     *                             and the claim ID.
+     * @param proofClaimRequestDto DTO containing proof details and the claim ID.
      * @return The response DTO of the created proof for the claim.
      */
     @Operation(
             summary = "Create a proof for a claim",
-            description = "Creates a new proof for an existing claim by providing the necessary details such as proof path, proof type, and claim ID."
+            description = "Creates a new proof for an existing claim by providing details such as proof path, proof type, and claim ID."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -73,7 +73,8 @@ public class ProofController {
             )
     })
     @PostMapping("/claim")
-    public ResponseEntity<ProofResponseDto> createProofForClaim(@RequestBody @Valid ProofClaimRequestDto proofClaimRequestDto) {
+    public ResponseEntity<ProofResponseDto> createProofForClaim(
+            @RequestBody @Valid ProofClaimRequestDto proofClaimRequestDto) {
         return ResponseEntity.ok(proofService.createClaimProof(proofClaimRequestDto));
     }
 }

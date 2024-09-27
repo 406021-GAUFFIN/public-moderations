@@ -16,12 +16,15 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of the ProofService for managing proof claims.
+ */
 @Service
 @RequiredArgsConstructor
 public class ProofServiceImpl implements ProofService {
 
     /**
-     * Repository for accessing worker entities.
+     * Repository for accessing proof entities.
      */
     private final ProofJpaRepository proofJpaRepository;
 
@@ -35,6 +38,13 @@ public class ProofServiceImpl implements ProofService {
      */
     private final ModelMapper modelMapper;
 
+    /**
+     * Creates a proof claim from the request data; throws
+     * exceptions for invalid states or missing claims.
+     *
+     * @param requestDto details of the proof claim to create.
+     * @return response with the created proof claim details.
+     */
 
     @Override
     @Transactional
@@ -50,6 +60,14 @@ public class ProofServiceImpl implements ProofService {
         proofEntity.setProofContext(ProofContext.CLAIM_JUSTIFICATION);
         return modelMapper.map(proofJpaRepository.save(proofEntity), ProofResponseDto.class);
     }
+
+    /**
+     * Checks if the claim state is valid for adding proof.
+     *
+     * @param claimState the state of the claim to check.
+     * @return true if the claim state is valid; false otherwise.
+     */
+
     private Boolean isValidClaimState(ClaimState claimState) {
         return claimState == ClaimState.SENT || claimState == ClaimState.ON_REVISION;
     }

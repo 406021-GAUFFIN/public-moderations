@@ -10,8 +10,6 @@ import lombok.Setter;
 
 /**
  * Entity representing types of sanctions in the system.
- * Each sanction type has a name, description, and
- * a severity level.
  */
 @Entity
 @Table(name = SanctionTypeEntity.TABLE_NAME)

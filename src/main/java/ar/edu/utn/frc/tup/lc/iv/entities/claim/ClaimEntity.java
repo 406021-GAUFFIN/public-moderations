@@ -36,11 +36,6 @@ public class ClaimEntity extends BaseEntity {
      */
     static final String TABLE_NAME = "CLAIM";
 
-    /**
-     * The ID of the user who made the claim.
-     */
-    @Column(name = "USER_ID")
-    private Integer userId;
 
     /**
      * The date of expiration for a claim.

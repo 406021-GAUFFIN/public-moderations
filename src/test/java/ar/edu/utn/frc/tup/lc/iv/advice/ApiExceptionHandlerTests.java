@@ -2,6 +2,8 @@ package ar.edu.utn.frc.tup.lc.iv.advice;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,11 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ApiExceptionHandlerTests {
+
+    @InjectMocks
+    private ApiExceptionHandler apiExceptionHandler;
+    @Mock
+    private BindingResult bindingResult;
 
     /**
      * Tests {@link ApiExceptionHandler#handleAllExceptions(Exception)} for handling generic exceptions.
@@ -43,37 +50,44 @@ public class ApiExceptionHandlerTests {
 
     }
 
-    /**
-     * Tests {@link ApiExceptionHandler#handleMethodArgumentNotValid(MethodArgumentNotValidException)}
-     * for handling validation errors in method arguments.
-     *
-     * <p>Verifies that the method returns a {@code 400 Bad Request} status, includes the correct error message,
-     * a list of validation errors, and a non-null timestamp.
-     *
-     * @see ApiExceptionHandler#handleMethodArgumentNotValid(MethodArgumentNotValidException)
-     */
     @Test
     public void testHandleMethodArgumentNotValid() {
 
-        ApiExceptionHandler handler = new ApiExceptionHandler();
+        FieldError fieldError = new FieldError("object", "field", "Field is invalid");
+        when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList(fieldError));
 
-
-        BindingResult bindingResult = mock(BindingResult.class);
-        when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList(
-                new FieldError("object", "field1", "Field1 is required"),
-                new FieldError("object", "field2", "Field2 must be greater than 18")
-        ));
         MethodParameter parameter = mock(MethodParameter.class);
-        MethodArgumentNotValidException ex = new MethodArgumentNotValidException(parameter,bindingResult);
+        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindingResult);
 
-        ResponseEntity<ErrorApi> response = handler.handleMethodArgumentNotValid(ex);
+
+        ResponseEntity<ErrorApi> response = apiExceptionHandler.handleMethodArgumentNotValid(exception);
+
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(400, Objects.requireNonNull(response.getBody()).getStatus());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getStatus());
         assertEquals("Validation failed", response.getBody().getMessage());
-        assertEquals(2, response.getBody().getErrors().size());
-        assertEquals("Field1 is required", response.getBody().getErrors().get(0));
-        assertEquals("Field2 must be greater than 18", response.getBody().getErrors().get(1));
+        assertEquals("Field is invalid", response.getBody().getError());
+        assertNotNull(response.getBody().getTimestamp());
+    }
+
+    @Test
+    public void testHandleMethodArgumentNotValid_NoErrors() {
+
+        when(bindingResult.getFieldErrors()).thenReturn(Arrays.asList());
+
+        MethodParameter parameter = mock(MethodParameter.class);
+        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindingResult);
+
+
+        ResponseEntity<ErrorApi> response = apiExceptionHandler.handleMethodArgumentNotValid(exception);
+
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getStatus());
+        assertEquals("Validation failed", response.getBody().getMessage());
+        assertEquals("Validation error occurred", response.getBody().getError());
         assertNotNull(response.getBody().getTimestamp());
     }
 }

@@ -26,6 +26,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class ApiExceptionHandler {
 
+    /**
+     * Date formater string.
+     */
+    private static final String DATE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Handles unhandled exceptions and returns a structured error response.
@@ -56,28 +60,29 @@ public class ApiExceptionHandler {
      *
      * @param ex the exception with validation errors.
      * @return a {@link ResponseEntity} with an {@link ErrorApi} object,
-     *         status {@code 400 Bad Request}, and validation error details.
+     * status {@code 400 Bad Request}, and validation error details.
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorApi> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 
-        List<String> errors = ex.getBindingResult()
+
+        String error = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
+                .findFirst()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
+                .orElse("Validation error occurred");
 
-
-        ErrorApi error = ErrorApi.builder()
+        ErrorApi errorApi = ErrorApi.builder()
                 .timestamp(timestamp)
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message("Validation failed")
-                .errors(errors)
+                .error(error)
                 .build();
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorApi, HttpStatus.BAD_REQUEST);
     }
 
     /**

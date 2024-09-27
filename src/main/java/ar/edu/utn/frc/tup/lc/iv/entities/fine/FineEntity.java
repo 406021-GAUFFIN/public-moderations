@@ -44,8 +44,6 @@ public class FineEntity extends BaseEntity {
     @Column(name = "PLOT_ID")
     private Integer plotId;
 
-
-
     /**
      * The current state of the moderation
      * process, represented by {@link FineState}.

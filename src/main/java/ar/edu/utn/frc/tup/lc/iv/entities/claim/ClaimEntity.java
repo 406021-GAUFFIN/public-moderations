@@ -37,11 +37,9 @@ public class ClaimEntity extends BaseEntity {
     static final String TABLE_NAME = "CLAIM";
 
 
-    /**
-     * The date of expiration for a claim.
-     */
-    @Column(name = "EXPIRING_DATE")
-    private Date expiringDate;
+
+    @Column(name = "PLOT_ID")
+    private Integer plotId;
 
     /**
      * The type of sanction related to the claim.

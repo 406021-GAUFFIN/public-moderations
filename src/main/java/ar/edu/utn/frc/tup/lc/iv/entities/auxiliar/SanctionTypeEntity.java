@@ -1,11 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.entities.auxiliar;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.SanctionSeverity;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,12 +37,10 @@ public class SanctionTypeEntity extends BaseEntity {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    /**
-     * The severity of the sanction, represented
-     * by {@link SanctionSeverity}.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "SANCTION_SEVERITY")
-    private SanctionSeverity sanctionSeverity;
+    @Column(name = "VALIDITY_PERIOD")
+    private Integer validityPeriod;
+
+    @Column(name = "PRICE")
+    private Double price;
 
 }

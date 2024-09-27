@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.advice;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
+import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -26,6 +30,8 @@ public class ApiExceptionHandlerTests {
     private ApiExceptionHandler apiExceptionHandler;
     @Mock
     private BindingResult bindingResult;
+    private static final String DATE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
+
 
     /**
      * Tests {@link ApiExceptionHandler#handleAllExceptions(Exception)} for handling generic exceptions.
@@ -89,5 +95,49 @@ public class ApiExceptionHandlerTests {
         assertEquals("Validation failed", response.getBody().getMessage());
         assertEquals("Validation error occurred", response.getBody().getError());
         assertNotNull(response.getBody().getTimestamp());
+    }
+
+    @Test
+    public void testHandleNotFoundException() {
+
+        String errorMessage = "Claim not found";
+        EntityNotFoundException ex = new EntityNotFoundException(errorMessage);
+
+
+        ResponseEntity<ErrorApi> response = apiExceptionHandler.handleNotFoundExceptiob(ex);
+
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.NOT_FOUND.value(), Objects.requireNonNull(response.getBody()).getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), response.getBody().getError());
+        assertEquals(errorMessage, response.getBody().getMessage());
+        assertNotNull(response.getBody().getTimestamp());
+
+
+        String timestamp = response.getBody().getTimestamp();
+        assertDoesNotThrow(() -> LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
+    @Test
+    public void testHandleInvalidClaimStateException() {
+
+        String errorMessage = "The claim state is not valid for adding proof.";
+        InvalidClaimStateException ex = new InvalidClaimStateException(errorMessage);
+
+
+        ResponseEntity<ErrorApi> response = apiExceptionHandler.handleInvalidClaimStateException(ex);
+
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), Objects.requireNonNull(response.getBody()).getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.getReasonPhrase(), response.getBody().getError());
+        assertEquals(errorMessage, response.getBody().getMessage());
+        assertNotNull(response.getBody().getTimestamp());
+
+
+        String timestamp = response.getBody().getTimestamp();
+        assertDoesNotThrow(() -> LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern(DATE_FORMATTER)));
     }
 }

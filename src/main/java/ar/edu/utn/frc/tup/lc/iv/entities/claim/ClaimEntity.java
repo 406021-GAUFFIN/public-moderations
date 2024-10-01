@@ -4,18 +4,23 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ClaimState;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
+import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.CascadeType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+import java.util.List;
 
 
 /**
@@ -62,5 +67,12 @@ public class ClaimEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "INFRACTION_ID")
     private InfractionEntity infraction;
+
+
+    /**
+     * The list of proofs associated with the claim.
+     */
+    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
+    private List<ProofEntity> proofs;
 
 }

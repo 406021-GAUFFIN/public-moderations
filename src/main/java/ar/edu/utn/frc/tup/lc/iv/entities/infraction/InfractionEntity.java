@@ -6,6 +6,7 @@ import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.claim.ClaimEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToOne;
@@ -78,6 +79,13 @@ public class InfractionEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "FINE_ID", referencedColumnName = "id")
     private FineEntity fine;
+
+
+    /**
+     * The list of proofs associated with the infraction.
+     */
+    @OneToMany(mappedBy = "infraction", cascade = CascadeType.ALL)
+    private List<ProofEntity> proofs;
 
 
 }

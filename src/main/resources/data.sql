@@ -1,5 +1,5 @@
-INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, sanction_severity) VALUES
-(999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Ruidos molestos', 'Ruidos molesos', 'HIGH');
+INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, validity_period, price) VALUES
+(999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Ruidos molestos', 'Ruidos molesos', 15, 35000);
 
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by,  fine_state ,  plot_id , sanction_type )VALUES
     (999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'ON_ASSEMBLY',  1, 999);
@@ -21,7 +21,7 @@ INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated
     (1007, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1,  'ON_ASSEMBLY',  1, 999);
 insert into  infraction (id , created_by , created_date , last_updated_at , last_updated_by, description , infraction_state  , plot_id, fine_id , sanction_type )
     VALUES (1005, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Molestaba demasiado ', 'APPROVED',1, 999, 999);
-INSERT INTO claim (id, created_by, created_date, last_updated_at, last_updated_by, expiring_date, sanction_type, claim_state, infraction_id)
-    VALUES (43, 1, '2024-09-26 10:00:00', '2024-09-26 10:00:00', 1, '2024-12-31', 999, 'SENT', 1005);
+INSERT INTO claim (id, created_by, created_date, last_updated_at, last_updated_by, sanction_type, claim_state, infraction_id)
+    VALUES (43, 1, '2024-09-26 10:00:00', '2024-09-26 10:00:00', 1, 999, 'SENT', 1005);
 
 

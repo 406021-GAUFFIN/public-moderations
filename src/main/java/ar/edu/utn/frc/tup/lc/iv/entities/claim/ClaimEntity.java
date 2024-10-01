@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 
 /**
@@ -38,10 +37,10 @@ public class ClaimEntity extends BaseEntity {
 
 
     /**
-     * The date of expiration for a claim.
+     * The ID of the plot who is sent the claim.
      */
-    @Column(name = "EXPIRING_DATE")
-    private Date expiringDate;
+    @Column(name = "PLOT_ID")
+    private Integer plotId;
 
     /**
      * The type of sanction related to the claim.

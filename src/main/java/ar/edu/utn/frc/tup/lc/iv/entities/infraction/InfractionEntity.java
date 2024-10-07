@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -60,6 +61,9 @@ public class InfractionEntity extends BaseEntity {
     @Column(name = "INFRACTION_STATE")
     private InfractionState infractionState;
 
+    @Column(name = "EXPIRATION_DATE")
+    private LocalDateTime expirationDate;
+
     /**
      * The type of sanction associated with the infraction.
      */
@@ -86,6 +90,8 @@ public class InfractionEntity extends BaseEntity {
      */
     @OneToMany(mappedBy = "infraction", cascade = CascadeType.ALL)
     private List<ProofEntity> proofs;
+
+
 
 
 }

@@ -109,8 +109,4 @@ public class FineController {
         return ResponseEntity.ok(fineService.updateFineState(fineDTO));
     }
 
-    @PostMapping("/fine/to-expense")
-    public ResponseEntity<FineDTO> sendFineToExpense(@RequestBody FineExpenseDTO fineExpenseDTO){
-        return ResponseEntity.ok(fineService.imputeFine(fineExpenseDTO));
-    }
 }

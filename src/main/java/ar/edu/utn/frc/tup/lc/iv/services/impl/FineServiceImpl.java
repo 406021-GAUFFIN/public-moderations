@@ -46,7 +46,7 @@ public class FineServiceImpl implements FineService {
      */
     private final ModelMapper modelMapper;
 
-    private final ExpensesClient expensesClient;
+
 
     /**
      * TGet all fines, paginated and filtered.
@@ -110,34 +110,7 @@ public class FineServiceImpl implements FineService {
 
         }
 
-    @Override
-    @Transactional
-    public FineDTO imputeFine(FineExpenseDTO request) {
-        FineEntity fineEntity = fineJpaRepository.findById(request.getFineId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Fine with id " + request.getFineId() + "not found")
-                );
-        if(!fineEntity.getFineState().equals(FineState.APPROVED)){
-            throw new IllegalArgumentException("Fine with id " + request.getFineId() + " is not approved");
-        }
 
-        if(LocalDateTime.now().isBefore(fineEntity.getLastUpdatedAt()
-                .plusDays(fineEntity.getSanctionType().getValidityPeriod()))){
-            throw new IllegalArgumentException("Fine with id " + request.getFineId() + " can still be "
-                    + "challenged by the owner of the plot");
-
-        }
-        FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
-        fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
-        fineExpenseDTO.setFineId(request.getFineId());
-        fineExpenseDTO.setPeriod(LocalDateTime.now());
-        fineExpenseDTO.setType(request.getType());
-        //expensesClient.sendToExpenses(fineExpenseDTO);
-
-        fineEntity.setFineState(FineState.IMPUTED_ON_EXPENSE);
-        return modelMapper.map(fineJpaRepository.save(fineEntity), FineDTO.class);
-
-    }
 }
 
 

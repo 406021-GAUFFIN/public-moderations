@@ -33,7 +33,7 @@ public interface FineService {
     FineDTO getById(Long id);
 
     FineDTO updateFineState(FineUpdateStateDTO request);
-    FineDTO imputeFine(FineExpenseDTO request);
+
 
 
 

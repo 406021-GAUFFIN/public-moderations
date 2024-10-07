@@ -36,6 +36,9 @@ public enum FineState {
 
         switch (this){
             case APPROVED:
+                if (fineEntity.getFineState().equals(FineState.APPROVED)) {
+                    throw new IllegalArgumentException("The fine is already approved");
+                }
                 if(!fineEntity.getFineState().equals(FineState.ON_ASSEMBLY)){
                     throw new IllegalArgumentException("Fine has to be approved by assembly before approving");
                 }

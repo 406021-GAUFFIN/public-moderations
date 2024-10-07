@@ -19,8 +19,4 @@ public enum ProofType {
      */
     DOCUMENT,
 
-    /**
-     * Proof provided as a physical item.
-     */
-    PHYSICAL_PROOF
 }

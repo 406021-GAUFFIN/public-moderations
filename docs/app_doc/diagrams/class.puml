@@ -2,13 +2,12 @@
 
 entity "Claim" as claim {
   + claim_id : INT <<PK>>
-  + user_id : INT <<FK>>
+  + plot_id : INT <<FK>>
   + sancion_type_id : INT <<FK>>
   + created_date : LocalDateTime
   + last_modified_at : LocalDateTime
   + last_modified_by : VARCHAR(255)
   + created_by : VARCHAR(255)  // Who made the claim
-  + expiration_date : LocalDateTime
   + state : ENUM("ENVIADO", "ENREVISIÓN", "APELADO", "APROBADO", "RECHAZADO")
 
 
@@ -22,7 +21,8 @@ entity "SancionType" as sancion_type {
   + last_modified_at : LocalDateTime
   + last_modified_by : VARCHAR(255)
   + created_by : VARCHAR(255) // Optional detailed description of the sanction type
-  + severity_level : ENUM("LOW", "MEDIUM", "HIGH")
+  + validity_period: INT
+  + price: DECIMAL(10,2)
 }
 entity "Proof" as proof {
   + proof_id : INT <<PK>>
@@ -40,7 +40,7 @@ entity "Proof" as proof {
 
 entity "Infraction" as infraction {
   + infraction_id : INT <<PK>>
-  + user_id : INT <<FK>>  // The person being infracted
+  + plot_id : INT <<FK>>  // The person being infracted
   + sancion_type_id : INT <<FK>>  // Link to SancionType table
   + created_date : LocalDateTime
   + last_modified_at : LocalDateTime
@@ -49,11 +49,12 @@ entity "Infraction" as infraction {
   + sancion_type_id : INT <<FK>>
   + proof_submission_deadline : LocalDateTime
   + state : ENUM("APROBADA", "EN APELACION", "APELADA", "APROBADA", "RECHAZADA")
+  + expiration_date: LocalDateTime
 }
 
-entity "Moderation" as moderation {
-  + moderation_id : INT <<PK>>
-  + user_id : INT <<FK>>  // The person being moderated
+entity "Fine" as fine {
+  + fine_id : INT <<PK>>
+  + plot_id : INT <<FK>>  // The person being moderated
   + sancion_type_id : INT <<FK>>  // Link to SancionType table
   + infraction_id : INT <<FK>>  // Link to related infraction
   + created_date : LocalDateTime
@@ -61,18 +62,17 @@ entity "Moderation" as moderation {
   + last_modified_by : VARCHAR(255)
   + created_by : VARCHAR(255)
   + state : ENUM("EN ASAMBLEA", "APROBADA", "RECHAZADA", "IMPUTADA EN EXPENSA")
-  + price : DECIMAL(10,2)
   + approved_by_assembly : BOOLEAN
 }
 
 claim ||--|| sancion_type : "References"
 
-moderation ||--|| sancion_type : "References"
+fine ||--|| sancion_type : "References"
 claim ||--o{ proof : "has"
 infraction ||--o{ claim : "contains"
 infraction ||--|| sancion_type : "References"
 infraction ||--o{ proof : "has"
-moderation ||--o{ infraction : "includes"
+fine ||--o{ infraction : "includes"
 
 
 @enduml

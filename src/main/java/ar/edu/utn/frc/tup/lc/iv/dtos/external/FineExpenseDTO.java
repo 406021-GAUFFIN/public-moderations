@@ -1,12 +1,20 @@
 package ar.edu.utn.frc.tup.lc.iv.dtos.external;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 import java.time.LocalDateTime;
 
 
-@Data
+/**
+ * Data Transfer Object representing a fine expense.
+ * Contains information about the fine to be recorded,
+ * including its ID,
+ * associated lot ID, realization period, amount, and type.
+ */
+
 @NoArgsConstructor
 @Setter
 @Getter

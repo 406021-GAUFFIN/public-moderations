@@ -1,11 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
-import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
+
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
-import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
-import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseResponseDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
@@ -20,8 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,6 +80,14 @@ public class FineServiceImpl implements FineService {
         return modelMapper.map(fineEntity.get(), FineDTO.class);
     }
 
+    /**
+     * Updates the state of a fine based on the provided request.
+     *
+     * @param request the DTO containing the fine ID and the new state
+     * @return the updated FineDTO
+     * @throws EntityNotFoundException if the fine is not found or
+     * the state transition is not allowed
+     */
     @Override
     @Transactional
     public FineDTO updateFineState(FineUpdateStateDTO request) {

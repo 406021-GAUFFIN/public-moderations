@@ -32,21 +32,29 @@ public enum FineState {
      */
     IMPUTED_ON_EXPENSE;
 
-    public void validateTransition(FineEntity fineEntity){
+    /**
+     * Validates the state transition of a fine.
+     * Throws an exception if the transition is not allowed
+     * based on the current fine state.
+     *
+     * @param fineEntity the fine entity whose state is being updated
+     * @throws IllegalArgumentException if the state transition is invalid
+     */
+    public void validateTransition(FineEntity fineEntity) {
 
-        switch (this){
+        switch (this) {
             case APPROVED:
                 if (fineEntity.getFineState().equals(FineState.APPROVED)) {
                     throw new IllegalArgumentException("The fine is already approved");
                 }
-                if(!fineEntity.getFineState().equals(FineState.ON_ASSEMBLY)){
+                if (!fineEntity.getFineState().equals(FineState.ON_ASSEMBLY)) {
                     throw new IllegalArgumentException("Fine has to be approved by assembly before approving");
                 }
                 break;
             case APPROVED_CHALLENGED:
                 if (fineEntity.getFineState().equals(FineState.APPROVED)
                         && fineEntity.getLastUpdatedAt().plusDays(fineEntity.getSanctionType().getValidityPeriod())
-                            .isAfter(LocalDateTime.now())){
+                            .isAfter(LocalDateTime.now())) {
                     throw new IllegalArgumentException("User cant no longer appeal the fine");
                 }
                 break;

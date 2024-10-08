@@ -13,18 +13,35 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-
+/**
+ * Service to run a scheduled job for imputing fines as expenses.
+ * Runs daily at midnight using a cron expression.
+ */
 @Service
 @AllArgsConstructor
 public class FineExpenseCron {
 
+    /**
+     * Client for interacting with the expenses system.
+     */
     private final ExpensesClient expensesClient;
+
+    /**
+     * Repository for accessing fine entities.
+     */
     private final FineJpaRepository fineJpaRepository;
 
+    /**
+     * Logger for logging errors and information.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(FineExpenseCron.class);
 
-    private static final Logger log = LoggerFactory.getLogger(FineExpenseCron.class);
 
+    /**
+     * Processes approved fines and sends them to the expense system
+     * if they can no longer be challenged. Updates fines to "IMPUTED_ON_EXPENSE".
+     * Runs daily at midnight.
+     */
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void imputeFines() {
@@ -56,12 +73,12 @@ public class FineExpenseCron {
 
             } catch (Exception e) {
 
-                log.error("Error processing fine with id {}: {}", fineEntity.getId(), e.getMessage());
+                LOGGER.error("Error processing fine with id {}: {}", fineEntity.getId(), e.getMessage());
             }
         });
 
 
-        log.info("Finished imputing fines for today");
+        LOGGER.info("Finished imputing fines for today");
     }
 
 }

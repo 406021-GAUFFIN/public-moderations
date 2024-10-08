@@ -28,6 +28,12 @@ public interface FineJpaRepository extends JpaRepository<FineEntity, Long>, JpaS
     @Override
     Page<FineEntity> findAll(Specification<FineEntity> filter, Pageable pageable);
 
+    /**
+     * Get all fines by state.
+     *
+     * @param state the filter specification
+     * @return a list of FineEntity
+     */
     List<FineEntity> findAllByFineState(FineState state);
 
 

@@ -10,23 +10,40 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 
+/**
+ * Client class responsible for sending fine
+ * expenses data to the external expenses service.
+ */
 @Component
 @RequiredArgsConstructor
-public class ExpensesClient {
+public final class ExpensesClient {  // Marked final to prevent extension
 
+    /**
+     * WebClient used for making HTTP requests.
+     */
     private final WebClient webClient;
 
+    /**
+     * Base URL of the external expenses service.
+     */
     @Value("${expenses.url}")
     private String baseUrl;
 
-
+    /**
+     * Sends fine expense data to the expenses service
+     * and retrieves the response.
+     *
+     * @param fineExpenseDTO the data transfer object
+     *                       containing fine expense information
+     * @return FineExpenseResponseDTO the response received from the expenses service
+     */
     public FineExpenseResponseDTO sendToExpenses(FineExpenseDTO fineExpenseDTO) {
-
         Mono<FineExpenseResponseDTO> response = webClient.post()
                 .uri(baseUrl + "/charges/fines")
                 .bodyValue(fineExpenseDTO)
                 .retrieve()
                 .bodyToMono(FineExpenseResponseDTO.class);
-    return response.block();
+        return response.block();
     }
 }
+

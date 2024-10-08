@@ -51,25 +51,24 @@ public class FineExpenseCron {
         fineEntities.forEach(fineEntity -> {
             try {
 
-                if (LocalDateTime.now().isBefore(fineEntity.getLastUpdatedAt()
+                if (LocalDateTime.now().isAfter(fineEntity.getLastUpdatedAt()
                         .plusDays(fineEntity.getSanctionType().getValidityPeriod()))) {
-                    throw new IllegalArgumentException("Fine with id " + fineEntity.getId() + " can still be "
-                            + "challenged by the owner of the plot");
+                    FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
+                    fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
+                    fineExpenseDTO.setFineId(fineEntity.getId());
+                    fineExpenseDTO.setPeriod(LocalDateTime.now());
+                    fineExpenseDTO.setType("extraordinary");
+
+
+                    expensesClient.sendToExpenses(fineExpenseDTO);
+
+
+                    fineEntity.setFineState(FineState.IMPUTED_ON_EXPENSE);
+                    fineJpaRepository.save(fineEntity);
                 }
 
 
-                FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
-                fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
-                fineExpenseDTO.setFineId(fineEntity.getId());
-                fineExpenseDTO.setPeriod(LocalDateTime.now());
-                fineExpenseDTO.setType("extraordinary");
 
-
-                expensesClient.sendToExpenses(fineExpenseDTO);
-
-
-                fineEntity.setFineState(FineState.IMPUTED_ON_EXPENSE);
-                fineJpaRepository.save(fineEntity);
 
             } catch (Exception e) {
 

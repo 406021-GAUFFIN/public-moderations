@@ -97,10 +97,10 @@ public class FineServiceImpl implements FineService {
         }
 
         if (fineEntity.get().getFineState().equals(FineState.REJECTED)) {
-            throw new EntityNotFoundException("Fine state cant be updated since its been rejected");
+            throw new IllegalArgumentException("Fine state cant be updated since its been rejected");
         }
         if (fineEntity.get().getFineState().equals(FineState.IMPUTED_ON_EXPENSE)) {
-            throw new EntityNotFoundException("Fine state cant be updated since its been already imputed on expense");
+            throw new IllegalArgumentException("Fine state cant be updated since its been already imputed on expense");
         }
 
         FineEntity fineToUpdate = fineEntity.get();

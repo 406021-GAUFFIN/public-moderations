@@ -1,10 +1,13 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 
+import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.error.ExpensesClientException;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 
@@ -17,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.reactive.function.client.WebClientException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +46,13 @@ public class FineServiceImpl implements FineService {
      * Model mapper.
      */
     private final ModelMapper modelMapper;
+
+
+
+    /**
+     * Expenses client object.
+     */
+    private final ExpensesClient expensesClient;
 
 
 
@@ -106,13 +118,43 @@ public class FineServiceImpl implements FineService {
         FineEntity fineToUpdate = fineEntity.get();
         FineState newState = request.getFineState();
 
+
+
         newState.validateTransition(fineToUpdate);
         fineToUpdate.setFineState(newState);
 
+
+
         FineEntity updatedFine = fineJpaRepository.save(fineToUpdate);
+        if (newState == FineState.APPROVED) {
+            sendFineToExpense(updatedFine);
+        }
         return modelMapper.map(updatedFine, FineDTO.class);
 
         }
+    /**
+     * Sends fine data from the given {@link FineEntity} to the expenses service.
+     *
+     * @param fineEntity The fine data to send.
+     * @throws ExpensesClientException If sending fails.
+     */
+
+     private void sendFineToExpense(FineEntity fineEntity) {
+         FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
+         fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
+         fineExpenseDTO.setFineId(fineEntity.getId());
+         fineExpenseDTO.setPeriod(LocalDateTime.now());
+         fineExpenseDTO.setType(fineEntity.getSanctionType().getPriceType());
+
+        try {
+            expensesClient.sendToExpenses(fineExpenseDTO);
+        } catch (WebClientException e) {
+            throw new ExpensesClientException("Error when sending fine to expenses: " + e.getMessage(), e);
+        }
+
+
+
+     }
 
 
 }

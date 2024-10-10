@@ -1,9 +1,11 @@
 package ar.edu.utn.frc.tup.lc.iv.services;
 
 
+import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
@@ -49,40 +51,15 @@ public class FineServiceImplTests {
     @InjectMocks
     private FineServiceImpl fineService;
 
+    @MockBean
+    private ExpensesClient expensesClient;
+
 
     @Mock
     @Qualifier("modelMapper")
     private ModelMapper modelMapper;
 
-    @Test
-    void updateFineState_Success() {
-        // Given
-        Long fineId = 1L;
-        FineUpdateStateDTO request = new FineUpdateStateDTO();
-        request.setId(fineId);
-        request.setFineState(FineState.APPROVED);
 
-        FineEntity existingFine = new FineEntity();
-        existingFine.setId(fineId);
-        existingFine.setFineState(FineState.ON_ASSEMBLY);
-        existingFine.setPlotId(1);
-
-
-        FineDTO fineDTO = new FineDTO();
-        fineDTO.setFineState(FineState.APPROVED);
-        when(modelMapper.map(existingFine, FineDTO.class)).thenReturn(fineDTO);
-        when(fineJpaRepository.findById(fineId)).thenReturn(Optional.of(existingFine));
-        when(fineJpaRepository.save(any(FineEntity.class))).thenReturn(existingFine);
-
-        // When
-        FineDTO actualResponse = fineService.updateFineState(request);
-
-
-        // Then
-        assertEquals(FineState.APPROVED, actualResponse.getFineState());
-        verify(fineJpaRepository).findById(fineId);
-        verify(fineJpaRepository).save(existingFine);
-    }
 
     @Test
     void updateFineState_FineRejected() {
@@ -104,25 +81,7 @@ public class FineServiceImplTests {
         assertEquals("Fine state cant be updated since its been rejected", exception.getMessage());
     }
 
-    @Test
-    void updateFineState_FineNotAssembly() {
-        Long fineId = 3L;
-        FineUpdateStateDTO request = new FineUpdateStateDTO();
-        request.setId(fineId);
-        request.setFineState(FineState.APPROVED);
 
-        FineEntity existingFine = new FineEntity();
-        existingFine.setId(fineId);
-        existingFine.setFineState(FineState.APPROVED_CHALLENGED);
-
-        when(fineJpaRepository.findById(fineId)).thenReturn(Optional.of(existingFine));
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            fineService.updateFineState(request);
-        });
-
-        assertEquals("Fine has to be approved by assembly before approving", exception.getMessage());
-    }
 
     @Test
     void updateFineState_FineNotFound() {

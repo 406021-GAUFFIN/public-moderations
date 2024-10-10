@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  */
 @Component
 @RequiredArgsConstructor
-public final class ExpensesClient {  // Marked final to prevent extension
+public final class ExpensesClient {
 
     /**
      * WebClient used for making HTTP requests.

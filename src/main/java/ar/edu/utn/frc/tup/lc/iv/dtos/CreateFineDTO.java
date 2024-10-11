@@ -2,11 +2,13 @@ package ar.edu.utn.frc.tup.lc.iv.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateFineDTO {
     /**
      * The ID of the plot associated with the moderation process.

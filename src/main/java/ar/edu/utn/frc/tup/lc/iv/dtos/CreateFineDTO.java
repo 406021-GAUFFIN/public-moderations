@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 /**
- * DTO for the creation of the fine
+ * DTO for the creation of the fine.
  */
 @Getter
 @Setter

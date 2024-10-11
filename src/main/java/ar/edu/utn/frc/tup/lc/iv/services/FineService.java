@@ -31,8 +31,12 @@ public interface FineService {
      */
     FineDTO getById(Long id);
 
-
-    FineDTO postFine(CreateFineDTO request);
+    /**
+     * Create fine.
+     * @param  createFineDTO fine to create
+     * @return created fine dto
+     */
+    FineDTO postFine(CreateFineDTO createFineDTO);
 
 
 }

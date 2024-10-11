@@ -10,6 +10,8 @@ import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ProofJpaRepository;
+import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ClaimJpaRepository;
+import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ProofJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.impl.ProofServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 

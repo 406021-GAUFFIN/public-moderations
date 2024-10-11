@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql-database-moderations:
+    image: mysql:latest
+    container_name: mysql-database-moderations
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: moderations
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - moderations-network
+
+  app:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-database-moderations:3306/moderations
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-database-moderations
+    networks:
+      - moderations-network
+
+
+
+networks:
+  moderations-network:
+    driver: bridge
+volumes:
+  mysql_data:

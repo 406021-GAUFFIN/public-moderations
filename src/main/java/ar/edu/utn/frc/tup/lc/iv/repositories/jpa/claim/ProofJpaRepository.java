@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine;
+package ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim;
 
 import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

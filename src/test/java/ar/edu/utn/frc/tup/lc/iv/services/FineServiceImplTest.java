@@ -5,7 +5,7 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
-import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.SanctionTypeJpaRepository;
+import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.impl.FineServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

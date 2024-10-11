@@ -78,13 +78,7 @@ public class FineServiceImpl implements FineService {
         if (fineEntity.isEmpty()) {
             throw new EntityNotFoundException("Fine Not Found");
         }
-
         return modelMapper.map(fineEntity.get(), FineDTO.class);
-        Fine fineModel = modelMapper.map(fineEntity.get(),Fine.class);
-        FineDTO fineDTO = modelMapper.map(fineEntity.get(),FineDTO.class);
-
-
-        return fineDTO;
     }
 
     @Override

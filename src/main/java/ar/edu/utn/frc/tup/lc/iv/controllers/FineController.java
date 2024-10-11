@@ -3,8 +3,7 @@ package ar.edu.utn.frc.tup.lc.iv.controllers;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
-import ar.edu.utn.frc.tup.lc.iv.models.CreateFine;
-import ar.edu.utn.frc.tup.lc.iv.models.Fine;
+import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -54,7 +53,7 @@ public class FineController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = Page.class)
                     )
             ),
             @ApiResponse(
@@ -87,7 +86,7 @@ public class FineController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = FineDTO.class)
                     )
             ),
             @ApiResponse(
@@ -120,7 +119,14 @@ public class FineController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = FineDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Plot or Sanction Type Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorApi.class)
                     )
             ),
             @ApiResponse(
@@ -132,13 +138,9 @@ public class FineController {
     })
     @PostMapping("fine")
     public ResponseEntity<FineDTO> postFine(
-            @RequestBody CreateFine request
+            @RequestBody CreateFineDTO request
             ) {
-        FineDTO dto = fineService.postFine(request);
-        if(dto == null)
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        else
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(fineService.postFine(request), HttpStatus.OK);
     }
 
 

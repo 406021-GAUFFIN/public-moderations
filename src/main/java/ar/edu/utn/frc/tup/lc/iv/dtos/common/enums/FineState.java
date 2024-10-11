@@ -7,32 +7,25 @@ public enum FineState {
     /**
      * The fine is currently being reviewed by the assembly.
      */
-    ON_ASSEMBLY(1),
+    ON_ASSEMBLY,
 
     /**
      * The fine has been approved.
      */
-    APPROVED(2),
+    APPROVED,
 
     /**
      * The fine has been rejected.
      */
-    REJECTED(3),
+    REJECTED,
     /**
      * The fine has been approved and the challenged by the owner of the plot.
      */
-    APPROVED_CHALENGED(4),
+    APPROVED_CHALENGED,
     /**
      * The fine has been assigned an expense.
      */
-    IMPUTED_ON_EXPENSE(5);
+    IMPUTED_ON_EXPENSE;
 
-    private final int id;
-    FineState(int id) {
-        this.id  = id ;
-    }
 
-    public int getId() {
-        return id;
-    }
 }

@@ -72,7 +72,7 @@ public class ProofEntity extends BaseEntity {
      * The infraction associated with this proof.
      */
     @ManyToOne
-    @JoinColumn(name = "INFRACTION_TYPE")
+    @JoinColumn(name = "INFRACTION")
     private InfractionEntity infraction;
 
 }

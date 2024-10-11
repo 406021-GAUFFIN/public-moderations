@@ -9,12 +9,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+/**
+ * Service to manage infractions.
+ */
 @Service
 public interface FineService {
-    Page<FineDTO> getAllFines(Pageable pageable, List<FineState> fineState, List<Long> sanctionTypes, Double price);
+    /**
+     * TGet all fines, paginated and filtered.
+     * @param pageable Pageable object with page size and current page
+     * @param fineState list of fine state to filter
+     * @param sanctionTypes list of sanction types to filter
+     *
+     * @return all fines paginated and filtered
+     */
+    Page<FineDTO> getAllFines(Pageable pageable, List<FineState> fineState, List<Long> sanctionTypes);
 
-
+    /**
+     * Get one fine by id.
+     * @param  id of the fine to get
+     * @return fine dto
+     */
     FineDTO getById(Long id);
 
 

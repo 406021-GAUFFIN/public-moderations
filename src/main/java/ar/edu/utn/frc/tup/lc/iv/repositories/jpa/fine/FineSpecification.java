@@ -5,21 +5,28 @@ import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
-
+/**
+ * Specification for fine filtering.
+ */
 public class FineSpecification {
-    private FineSpecification() {}
 
 
-    public static Specification<FineEntity> price(Double price) {
-        return (root, query, builder) -> builder.equal(root.get("price"), price);
-    }
-
-
+    /**
+     * Method to filter by sanction type array.
+     * @param  sanctionTypes sanction types to filter
+     *
+     * @return a specification with filter applied
+     */
     public static Specification<FineEntity> inSanctionType(List<Long> sanctionTypes) {
         return (root, query, builder) -> root.join("sanctionType").get("id")
                 .in(sanctionTypes);
     }
-
+    /**
+     * Method to filter by fine state array.
+     * @param  fineStates fine state to filter
+     *
+     * @return a specification with filter applied
+     */
     public static Specification<FineEntity> inModerationState(List<FineState> fineStates) {
         return (root, query, builder) -> root.get("moderationState")
                 .in(fineStates);

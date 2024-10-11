@@ -19,7 +19,7 @@ public enum FineState {
      */
     REJECTED(3),
     /**
-     * The fine has been approved and the challenged by the owner of the plot
+     * The fine has been approved and the challenged by the owner of the plot.
      */
     APPROVED_CHALENGED(4),
     /**

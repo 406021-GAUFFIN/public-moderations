@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.advice;
 
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
+import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 /**
@@ -26,6 +26,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class ApiExceptionHandler {
 
+    /**
+     * Date formater string.
+     */
+    private static final String DATE_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Handles unhandled exceptions and returns a structured error response.
@@ -56,31 +60,38 @@ public class ApiExceptionHandler {
      *
      * @param ex the exception with validation errors.
      * @return a {@link ResponseEntity} with an {@link ErrorApi} object,
-     *         status {@code 400 Bad Request}, and validation error details.
+     * status {@code 400 Bad Request}, and validation error details.
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorApi> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 
-        List<String> errors = ex.getBindingResult()
+
+        String error = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
+                .findFirst()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
+                .orElse("Validation error occurred");
 
-
-        ErrorApi error = ErrorApi.builder()
+        ErrorApi errorApi = ErrorApi.builder()
                 .timestamp(timestamp)
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message("Validation failed")
-                .errors(errors)
+                .error(error)
                 .build();
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorApi, HttpStatus.BAD_REQUEST);
     }
 
-
+    /**
+     * Handles validation errors for method arguments.
+     *
+     * @param ex the exception with validation errors.
+     * @return a {@link ResponseEntity} with an {@link ErrorApi} object,
+     *         status {@code 404 Not Found}, and validation error details.
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorApi> handleNotFoundExceptiob(EntityNotFoundException ex) {
         String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -93,6 +104,26 @@ public class ApiExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles {@link InvalidClaimStateException} with a 400 Bad Request response.
+     *
+     * @param ex The thrown exception.
+     * @return A 400 error response with details.
+     */
+    @ExceptionHandler(InvalidClaimStateException.class)
+    public ResponseEntity<ErrorApi> handleInvalidClaimStateException(InvalidClaimStateException ex) {
+        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+
+        ErrorApi error = ErrorApi.builder()
+                .timestamp(timeStamp)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -1,17 +1,19 @@
 package ar.edu.utn.frc.tup.lc.iv.models;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.InfractionState;
-import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
-import ar.edu.utn.frc.tup.lc.iv.entities.claim.ClaimEntity;
-import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
-import jakarta.persistence.*;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+/**
+ * infraction made by multiple claim.
+ */
+@NoArgsConstructor
 @Getter
 @Setter
-public class Infraction extends BaseModel{
+public class Infraction extends BaseModel {
 
 
     /**

@@ -57,7 +57,7 @@ public class SanctionTypeController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = Page.class)
                     )
             ),
             @ApiResponse(
@@ -90,7 +90,7 @@ public class SanctionTypeController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = List.class)
                     )
             ),
             @ApiResponse(
@@ -121,7 +121,7 @@ public class SanctionTypeController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = String.class)
+                            schema = @Schema(implementation = SanctionTypeDTO.class)
                     )
             ),
             @ApiResponse(

@@ -22,7 +22,7 @@ public class SanctionTypeSpecification {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(
                         criteriaBuilder.lower(root.get("name")),
-                        "%" + partialName.toUpperCase(Locale.ROOT) + "%"
+                        "%" + partialName.toLowerCase(Locale.ROOT) + "%"
                 );
     }
 

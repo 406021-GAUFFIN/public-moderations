@@ -9,8 +9,6 @@ import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ProofJpaRepository;
-import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ClaimJpaRepository;
-import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ProofJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.ProofService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

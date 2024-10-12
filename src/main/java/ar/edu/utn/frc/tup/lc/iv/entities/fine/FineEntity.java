@@ -18,6 +18,8 @@ import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+
 import java.util.List;
 
 /**
@@ -31,6 +33,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
+@Audited
 public class FineEntity extends BaseEntity {
 
     /**
@@ -42,7 +45,7 @@ public class FineEntity extends BaseEntity {
      * The ID of the plot associated with the moderation process.
      */
     @Column(name = "PLOT_ID")
-    private Integer plotId;
+    private Long plotId;
 
     /**
      * The current state of the moderation

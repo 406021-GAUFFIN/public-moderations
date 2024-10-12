@@ -21,12 +21,7 @@ public enum FineState {
     /**
      * The fine has been rejected.
      */
-    REJECTED,
-
-    /**
-     * The fine has been assigned an expense.
-     */
-    IMPUTED_ON_EXPENSE;
+    REJECTED;
 
     /**
      * Validates the state transition of a fine.

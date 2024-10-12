@@ -4,6 +4,7 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,12 @@ public interface FineService {
      */
     FineDTO getById(Long id);
 
+    /**
+     * Create fine.
+     * @param  createFineDTO fine to create
+     * @return created fine dto
+     */
+    FineDTO postFine(CreateFineDTO createFineDTO);
     /**
      * Updates the state of a fine.
      *

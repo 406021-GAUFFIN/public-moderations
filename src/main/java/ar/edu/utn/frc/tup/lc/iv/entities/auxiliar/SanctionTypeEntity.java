@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 /**
  * Entity representing types of sanctions in the system.
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@Audited
 public class SanctionTypeEntity extends BaseEntity {
 
     /**

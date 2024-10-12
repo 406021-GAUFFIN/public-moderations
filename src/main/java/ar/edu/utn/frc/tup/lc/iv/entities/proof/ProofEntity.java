@@ -16,6 +16,7 @@ import jakarta.persistence.EnumType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 
 /**
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Table(name = ProofEntity.TABLE_NAME)
 @NoArgsConstructor
+@Audited
 public class ProofEntity extends BaseEntity {
     /**
      * Name of the table on the database.

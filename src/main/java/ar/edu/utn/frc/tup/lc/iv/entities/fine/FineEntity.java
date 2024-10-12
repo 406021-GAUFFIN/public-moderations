@@ -45,7 +45,7 @@ public class FineEntity extends BaseEntity {
      * The ID of the plot associated with the moderation process.
      */
     @Column(name = "PLOT_ID")
-    private Integer plotId;
+    private Long plotId;
 
     /**
      * The current state of the moderation

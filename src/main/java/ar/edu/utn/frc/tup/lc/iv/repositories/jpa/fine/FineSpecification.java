@@ -28,7 +28,7 @@ public class FineSpecification {
      * @return a specification with filter applied
      */
     public static Specification<FineEntity> inModerationState(List<FineState> fineStates) {
-        return (root, query, builder) -> root.get("moderationState")
+        return (root, query, builder) -> root.get("fineState")
                 .in(fineStates);
     }
 }

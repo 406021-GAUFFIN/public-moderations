@@ -1,10 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
+
+import ar.edu.utn.frc.tup.lc.iv.dtos.SanctionTypeDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
-import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
-import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
-import ar.edu.utn.frc.tup.lc.iv.services.FineService;
+import ar.edu.utn.frc.tup.lc.iv.services.SanctionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -32,30 +29,29 @@ import java.util.List;
  * Fine controller class to manage fines.
  */
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 
 @RestController
-public class FineController {
+public class SanctionTypeController {
 
     /**
      * Service to manage fines.
      */
     @Autowired
     private
-    FineService fineService;
+    SanctionTypeService sanctionTypeService;
 
     /**
-     * Get all fines.
+     * Get all sanction types.
      * @param page number of current page
      * @param size size of page
-     * @param fineState array of states to filter
-     * @param sanctionTypes array of sanction types to filter
-     * @return paginated fines.
+     * @param partialName partial name to filter
+     * @return paginated sanctionTypes.
      */
 
     @Operation(
-            summary = "Get all fines",
-            description = "Get all fines")
+            summary = "Get all sanction types",
+            description = "Find all paginated sanction types o")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -71,13 +67,44 @@ public class FineController {
                             schema = @Schema(implementation = ErrorApi.class))
             )
     })
-    @GetMapping("pageable/fine")
-    public ResponseEntity<Page<FineDTO>> getFines(@RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size,
-                                                  @RequestParam(required = false) List<FineState> fineState,
-                                                  @RequestParam(required = false) List<Long> sanctionTypes) {
+    @GetMapping("pageable/sanctionType")
+    public ResponseEntity<Page<SanctionTypeDTO>> getSanctionTypesPaginated(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size,
+                                                          @RequestParam(required = false) String partialName) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(fineService.getAllFines(pageable, fineState, sanctionTypes), HttpStatus.OK);
+        return new ResponseEntity<>(sanctionTypeService.getAllSanctionTypes(pageable, partialName), HttpStatus.OK);
+    }
+
+
+    /**
+     * Get all sanction types.
+     * @param partialName partial name to filter
+     * @return  sanctionTypes.
+     */
+
+    @Operation(
+            summary = "Get filtered sanction types",
+            description = "Get filtered sanction types")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successful operation",
+                    content = @Content(
+                            schema = @Schema(implementation = List.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorApi.class))
+            )
+    })
+    @GetMapping("sanctionType")
+    public ResponseEntity<List<SanctionTypeDTO>> getSanctionTypes(
+                                                          @RequestParam(required = false) String partialName) {
+
+        return new ResponseEntity<>(sanctionTypeService.getAllSanctionTypes(partialName), HttpStatus.OK);
     }
 
     /**
@@ -94,7 +121,7 @@ public class FineController {
                     responseCode = "200",
                     description = "Successful operation",
                     content = @Content(
-                            schema = @Schema(implementation = FineDTO.class)
+                            schema = @Schema(implementation = SanctionTypeDTO.class)
                     )
             ),
             @ApiResponse(
@@ -104,50 +131,10 @@ public class FineController {
                             schema = @Schema(implementation = ErrorApi.class))
             )
     })
-    @GetMapping("fine/{id}")
-    public ResponseEntity<FineDTO> getFineById(
+    @GetMapping("sanctionType/{id}")
+    public ResponseEntity<SanctionTypeDTO> getSanctionTypeById(
             @PathVariable Long id
     ) {
-        return new ResponseEntity<>(fineService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(sanctionTypeService.getById(id), HttpStatus.OK);
     }
-
-
-    /**
-     * Post  fine.
-     * @param fineDTO to create.
-     * @return created fine.
-     */
-    @Operation(
-            summary = "Post  fine",
-            description = "Post  fine")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
-                    content = @Content(
-                            schema = @Schema(implementation = FineDTO.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Plot or Sanction Type Not Found",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorApi.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorApi.class))
-            )
-    })
-    @PostMapping("fine")
-    public ResponseEntity<FineDTO> postFine(
-            @RequestBody CreateFineDTO fineDTO
-            ) {
-        return new ResponseEntity<>(fineService.postFine(fineDTO), HttpStatus.OK);
-    }
-
-
 }

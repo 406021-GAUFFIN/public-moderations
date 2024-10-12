@@ -2,8 +2,11 @@ package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
+import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +20,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
-
 
 import static ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineSpecification.inModerationState;
 import static ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineSpecification.inSanctionType;
@@ -33,6 +35,11 @@ public class FineServiceImpl implements FineService {
      * Fine repository.
      */
     private final FineJpaRepository fineJpaRepository;
+
+    /**
+     * Sanction Type repository.
+     */
+    private final SanctionTypeJpaRepository sanctionTypeJpaRepository;
 
     /**
      * Model mapper.
@@ -71,8 +78,29 @@ public class FineServiceImpl implements FineService {
         if (fineEntity.isEmpty()) {
             throw new EntityNotFoundException("Fine Not Found");
         }
-
         return modelMapper.map(fineEntity.get(), FineDTO.class);
+    }
+
+    /**
+     * Create fine.
+     * @param  createFineDTO fine to create
+     * @return created fine dto
+     */
+    @Override
+    public FineDTO postFine(CreateFineDTO createFineDTO) {
+        FineEntity fineEntity = new FineEntity();
+        SanctionTypeEntity sanctionTypeEntity = sanctionTypeJpaRepository.findById(createFineDTO.getSanctionTypeId())
+                .orElseThrow(() -> new EntityNotFoundException("Sanction Type not found"));
+
+        // Validar que el plot exista contra cadastre service
+
+
+        fineEntity.setPlotId(createFineDTO.getPlotId());
+        fineEntity.setFineState(FineState.ON_ASSEMBLY);
+        fineEntity.setSanctionType(sanctionTypeEntity);
+        fineEntity = fineJpaRepository.save(fineEntity);
+        return modelMapper.map(fineJpaRepository.save(fineEntity), FineDTO.class);
+
     }
 
 }

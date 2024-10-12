@@ -18,6 +18,8 @@ import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+
 import java.util.List;
 
 /**
@@ -31,6 +33,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
+@Audited
 public class FineEntity extends BaseEntity {
 
     /**

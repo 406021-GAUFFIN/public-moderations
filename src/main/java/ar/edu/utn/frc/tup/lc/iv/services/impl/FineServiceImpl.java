@@ -120,7 +120,7 @@ public class FineServiceImpl implements FineService {
 
         PlotDTO plotDTO = cadastreClient.getPlotById(createFineDTO.getPlotId());
 
-        if(plotDTO==null){
+        if (plotDTO == null) {
             throw  new EntityNotFoundException("Plot not found");
         }
 

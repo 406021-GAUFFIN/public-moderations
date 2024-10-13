@@ -1,7 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.services;
 
+import ar.edu.utn.frc.tup.lc.iv.clients.CadastreClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.external.PlotDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
@@ -40,6 +42,9 @@ public class FineServiceImplTest {
 
     @Mock
     private ModelMapper modelMapper;
+
+    @Mock
+    private CadastreClient cadastreClient;
 
     @BeforeEach
     public void setUp() {
@@ -89,8 +94,15 @@ public class FineServiceImplTest {
         createFineDTO.setSanctionTypeId(1L);
         createFineDTO.setPlotId(1L);
 
+        CreateFineDTO createFineDTOError = new CreateFineDTO();
+        createFineDTOError.setSanctionTypeId(1L);
+        createFineDTOError.setPlotId(2L);
+
+
         SanctionTypeEntity sanctionTypeEntity = new SanctionTypeEntity();
         when(sanctionTypeJpaRepository.findById(createFineDTO.getSanctionTypeId())).thenReturn(Optional.of(sanctionTypeEntity));
+        when(cadastreClient.getPlotById(1L)).thenReturn(new PlotDTO(1L,1L));
+        when(cadastreClient.getPlotById(2L)).thenReturn(null);
 
         FineEntity fineEntity = new FineEntity();
         when(fineJpaRepository.save(any(FineEntity.class))).thenReturn(fineEntity);
@@ -101,6 +113,9 @@ public class FineServiceImplTest {
         Assertions.assertNotNull(result);
         verify(sanctionTypeJpaRepository, times(1)).findById(createFineDTO.getSanctionTypeId());
         verify(fineJpaRepository, times(2)).save(any(FineEntity.class));
+
+        when(modelMapper.map(fineEntity, FineDTO.class)).thenReturn(null);
+        Assertions.assertThrows(EntityNotFoundException.class, () -> fineService.postFine(createFineDTOError));
     }
 
     @Test

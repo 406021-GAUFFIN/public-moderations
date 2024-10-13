@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,6 +27,8 @@ public class FineControllerTest {
 
     @Mock
     private FineService fineService;
+
+
 
     @BeforeEach
     public void setUp() {
@@ -67,6 +68,7 @@ public class FineControllerTest {
         CreateFineDTO createFineDTO = new CreateFineDTO();
         FineDTO fineDTO = new FineDTO();
         when(fineService.postFine(createFineDTO)).thenReturn(fineDTO);
+
 
         ResponseEntity<FineDTO> response = fineController.postFine(createFineDTO);
 

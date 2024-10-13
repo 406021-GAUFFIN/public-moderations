@@ -1,7 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iv.dtos.common.enums;
 
-import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 
+import java.util.List;
 
 
 /**
@@ -28,18 +28,28 @@ public enum FineState {
      * Throws an exception if the transition is not allowed
      * based on the current fine state.
      *
-     * @param fineEntity the fine entity whose state is being updated
+     * @param fineState the fine entity whose state is being updated
      * @throws IllegalArgumentException if the state transition is invalid
      */
-    public void validateTransition(FineEntity fineEntity) {
+    public void validateTransition(FineState fineState) {
 
-        if (this == FineState.APPROVED) {
-            if (fineEntity.getFineState().equals(FineState.APPROVED)) {
-                throw new IllegalArgumentException("The fine is already approved");
-            }
-            if (!fineEntity.getFineState().equals(FineState.ON_ASSEMBLY)) {
-                throw new IllegalArgumentException("Fine has to be approved by assembly before approving");
-            }
+        if (!possibleNextFineStates().contains(fineState)) {
+
+                throw new IllegalArgumentException("The fine cant change to this state");
+
+        }
+    }
+
+    /**
+     *Returns to what possible states can a fine change.
+
+     * @return  List of possible next states if the state transition is invalid
+     */
+    public List<FineState> possibleNextFineStates() {
+        if (this == FineState.ON_ASSEMBLY) {
+            return List.of(APPROVED, REJECTED);
+        } else {
+            return List.of();
         }
     }
 }

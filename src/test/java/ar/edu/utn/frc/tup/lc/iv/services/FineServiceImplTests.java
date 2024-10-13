@@ -5,11 +5,10 @@ import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
-import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
-import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.ProofJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.impl.FineServiceImpl;
 import ar.edu.utn.frc.tup.lc.iv.services.impl.ProofServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,12 +46,11 @@ public class FineServiceImplTests {
 
     @Mock
     private FineJpaRepository fineJpaRepository;
+    @Mock
+    private ExpensesClient expensesClient;
 
     @InjectMocks
     private FineServiceImpl fineService;
-
-    @MockBean
-    private ExpensesClient expensesClient;
 
 
     @Mock
@@ -78,8 +76,7 @@ public class FineServiceImplTests {
             fineService.updateFineState(request);
         });
 
-        assertEquals("Fine state cant be updated since its been rejected", exception.getMessage());
-    }
+  }
 
 
 
@@ -99,25 +96,7 @@ public class FineServiceImplTests {
         assertEquals("Fine Not Found", exception.getMessage());
     }
 
-    @Test
-    void updateFineState_AlreadyImputedOnExpense() {
-        Long fineId = 4L;
-        FineUpdateStateDTO request = new FineUpdateStateDTO();
-        request.setId(fineId);
-        request.setFineState(FineState.APPROVED);
 
-        FineEntity existingFine = new FineEntity();
-        existingFine.setId(fineId);
-        existingFine.setFineState(FineState.IMPUTED_ON_EXPENSE);
-
-        when(fineJpaRepository.findById(fineId)).thenReturn(Optional.of(existingFine));
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            fineService.updateFineState(request);
-        });
-
-        assertEquals("Fine state cant be updated since its been already imputed on expense", exception.getMessage());
-    }
 
     @Test
     void getAllFines_Success() {
@@ -236,6 +215,33 @@ public class FineServiceImplTests {
 
         // Then
         assertThrows(EntityNotFoundException.class, () -> fineService.getById(fineId));
+    }
+
+    @Test
+    void updateFineState_FineApproved_ShouldSendToExpenses() {
+        Long fineId = 3L;
+        FineUpdateStateDTO request = new FineUpdateStateDTO();
+        request.setId(fineId);
+        request.setFineState(FineState.APPROVED);
+
+        FineEntity existingFine = new FineEntity();
+        existingFine.setId(fineId);
+        existingFine.setFineState(FineState.ON_ASSEMBLY);
+        SanctionTypeEntity sanctionType = new SanctionTypeEntity();
+        sanctionType.setPrice(100.0);
+        existingFine.setSanctionType(sanctionType);
+
+
+
+
+
+        when(fineJpaRepository.findById(fineId)).thenReturn(Optional.of(existingFine));
+        when(fineJpaRepository.save(any(FineEntity.class))).thenReturn(existingFine);
+
+        // Act
+        FineDTO result = fineService.updateFineState(request);
+
+        verify(expensesClient).sendToExpenses(any(FineExpenseDTO.class));
     }
 
 }

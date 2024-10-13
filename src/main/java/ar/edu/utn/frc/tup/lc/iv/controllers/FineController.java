@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
+import ar.edu.utn.frc.tup.lc.iv.controllers.api_response.ApiResponseConstants;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -62,15 +61,15 @@ public class FineController {
             description = "Get all fines")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -95,15 +94,15 @@ public class FineController {
             description = "Get fine by id")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -126,8 +125,8 @@ public class FineController {
             description = "Post  fine")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = FineDTO.class)
                     )
@@ -140,8 +139,8 @@ public class FineController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -169,7 +168,7 @@ public class FineController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = ApiResponseConstants.OK,
                     description = "Fine state updated successfully",
                     content = @Content(
                             schema = @Schema(implementation = FineDTO.class)
@@ -182,14 +181,15 @@ public class FineController {
                             schema = @Schema(implementation = ErrorApi.class))
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
     })
     @PutMapping("/fine/state")
     public ResponseEntity<FineDTO> updateFineState(@RequestBody FineUpdateStateDTO fineDTO) {
+        System.out.println(fineDTO);
         return ResponseEntity.ok(fineService.updateFineState(fineDTO));
     }
 

@@ -1,14 +1,15 @@
 package ar.edu.utn.frc.tup.lc.iv.clients;
 
-
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Client class responsible for sending fine
@@ -19,9 +20,9 @@ import reactor.core.publisher.Mono;
 public final class ExpensesClient {
 
     /**
-     * WebClient used for making HTTP requests.
+     * RestTemplate used for making HTTP requests.
      */
-    private final WebClient webClient;
+    private final RestTemplate restTemplate;
 
     /**
      * Base URL of the external expenses service.
@@ -35,15 +36,20 @@ public final class ExpensesClient {
      *
      * @param fineExpenseDTO the data transfer object
      *                       containing fine expense information
-     * @return FineExpenseResponseDTO the response received from the expenses service
      */
-    public FineExpenseResponseDTO sendToExpenses(FineExpenseDTO fineExpenseDTO) {
-        Mono<FineExpenseResponseDTO> response = webClient.post()
-                .uri(baseUrl + "/charges/fines")
-                .bodyValue(fineExpenseDTO)
-                .retrieve()
-                .bodyToMono(FineExpenseResponseDTO.class);
-        return response.block();
+    public void sendToExpenses(FineExpenseDTO fineExpenseDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+
+        HttpEntity<FineExpenseDTO> requestEntity = new HttpEntity<>(fineExpenseDTO, headers);
+        ResponseEntity<FineExpenseResponseDTO> responseEntity = restTemplate.exchange(
+                baseUrl + "/charges/fines",
+                HttpMethod.POST,
+                requestEntity,
+                FineExpenseResponseDTO.class
+        );
+
+        responseEntity.getBody();
     }
 }
 

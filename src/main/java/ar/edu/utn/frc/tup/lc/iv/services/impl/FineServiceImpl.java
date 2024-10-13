@@ -132,31 +132,25 @@ public class FineServiceImpl implements FineService {
     @Transactional
     public FineDTO updateFineState(FineUpdateStateDTO request) {
         Optional<FineEntity> fineEntity = fineJpaRepository.findById(request.getId());
+
         if (fineEntity.isEmpty()) {
             throw new EntityNotFoundException("Fine Not Found");
-        }
-
-        if (fineEntity.get().getFineState().equals(FineState.REJECTED)) {
-            throw new IllegalArgumentException("Fine state cant be updated since its been rejected");
-        }
-        if (fineEntity.get().getFineState().equals(FineState.IMPUTED_ON_EXPENSE)) {
-            throw new IllegalArgumentException("Fine state cant be updated since its been already imputed on expense");
         }
 
         FineEntity fineToUpdate = fineEntity.get();
         FineState newState = request.getFineState();
 
 
-
-        newState.validateTransition(fineToUpdate);
+        fineToUpdate.getFineState().validateTransition(newState);
         fineToUpdate.setFineState(newState);
 
 
-
         FineEntity updatedFine = fineJpaRepository.save(fineToUpdate);
+
         if (newState == FineState.APPROVED) {
             sendFineToExpense(updatedFine);
         }
+
         return modelMapper.map(updatedFine, FineDTO.class);
 
         }
@@ -173,13 +167,13 @@ public class FineServiceImpl implements FineService {
          fineExpenseDTO.setFineId(fineEntity.getId());
          fineExpenseDTO.setPeriod(LocalDateTime.now());
          fineExpenseDTO.setType(fineEntity.getSanctionType().getPriceType());
+         fineExpenseDTO.setLotId(fineEntity.getPlotId());
 
         try {
             expensesClient.sendToExpenses(fineExpenseDTO);
         } catch (WebClientException e) {
             throw new ExpensesClientException("Error when sending fine to expenses: " + e.getMessage(), e);
         }
-
 
 
      }

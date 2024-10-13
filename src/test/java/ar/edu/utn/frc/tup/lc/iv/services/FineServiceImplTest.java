@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iv.services;
 
+import ar.edu.utn.frc.tup.lc.iv.clients.CadastreClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
@@ -40,6 +41,9 @@ public class FineServiceImplTest {
 
     @Mock
     private ModelMapper modelMapper;
+
+    @Mock
+    private CadastreClient cadastreClient;
 
     @BeforeEach
     public void setUp() {

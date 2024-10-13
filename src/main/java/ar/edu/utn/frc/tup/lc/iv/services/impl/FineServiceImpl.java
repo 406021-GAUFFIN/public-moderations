@@ -1,11 +1,13 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 
+import ar.edu.utn.frc.tup.lc.iv.clients.CadastreClient;
 import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.external.PlotDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.error.ExpensesClientException;
@@ -61,6 +63,11 @@ public class FineServiceImpl implements FineService {
      */
     private final ExpensesClient expensesClient;
 
+    /**
+     * Cadastre client object.
+     */
+    private final CadastreClient cadastreClient;
+
 
 
     /**
@@ -110,6 +117,13 @@ public class FineServiceImpl implements FineService {
                 .orElseThrow(() -> new EntityNotFoundException("Sanction Type not found"));
 
         // Validar que el plot exista contra cadastre service
+
+        PlotDTO plotDTO = cadastreClient.getPlotById(createFineDTO.getPlotId());
+
+        if(plotDTO==null){
+            throw  new EntityNotFoundException("Plot not found");
+        }
+
 
 
         fineEntity.setPlotId(createFineDTO.getPlotId());

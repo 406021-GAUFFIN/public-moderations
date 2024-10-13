@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+
 import java.util.List;
 
 /**
@@ -62,6 +63,7 @@ public class InfractionEntity extends BaseEntity {
     @Column(name = "INFRACTION_STATE")
     private InfractionState infractionState;
 
+
     /**
      * The type of sanction associated with the infraction.
      */
@@ -88,6 +90,8 @@ public class InfractionEntity extends BaseEntity {
      */
     @OneToMany(mappedBy = "infraction", cascade = CascadeType.ALL)
     private List<ProofEntity> proofs;
+
+
 
 
 }

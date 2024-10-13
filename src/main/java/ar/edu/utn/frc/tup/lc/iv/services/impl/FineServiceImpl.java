@@ -1,15 +1,21 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
+
+import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
+import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.error.ExpensesClientException;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -17,7 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.reactive.function.client.WebClientException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +53,15 @@ public class FineServiceImpl implements FineService {
      * Model mapper.
      */
     private final ModelMapper modelMapper;
+
+
+
+    /**
+     * Expenses client object.
+     */
+    private final ExpensesClient expensesClient;
+
+
 
     /**
      * TGet all fines, paginated and filtered.
@@ -103,4 +120,67 @@ public class FineServiceImpl implements FineService {
 
     }
 
+    /**
+     * Updates the state of a fine based on the provided request.
+     *
+     * @param request the DTO containing the fine ID and the new state
+     * @return the updated FineDTO
+     * @throws EntityNotFoundException if the fine is not found or
+     * the state transition is not allowed
+     */
+    @Override
+    @Transactional
+    public FineDTO updateFineState(FineUpdateStateDTO request) {
+        Optional<FineEntity> fineEntity = fineJpaRepository.findById(request.getId());
+
+        if (fineEntity.isEmpty()) {
+            throw new EntityNotFoundException("Fine Not Found");
+        }
+
+        FineEntity fineToUpdate = fineEntity.get();
+        FineState newState = request.getFineState();
+
+
+        fineToUpdate.getFineState().validateTransition(newState);
+        fineToUpdate.setFineState(newState);
+
+
+        FineEntity updatedFine = fineJpaRepository.save(fineToUpdate);
+
+        if (newState == FineState.APPROVED) {
+            sendFineToExpense(updatedFine);
+        }
+
+        return modelMapper.map(updatedFine, FineDTO.class);
+
+        }
+    /**
+     * Sends fine data from the given {@link FineEntity} to the expenses service.
+     *
+     * @param fineEntity The fine data to send.
+     * @throws ExpensesClientException If sending fails.
+     */
+
+     private void sendFineToExpense(FineEntity fineEntity) {
+         FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
+         fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
+         fineExpenseDTO.setFineId(fineEntity.getId());
+         fineExpenseDTO.setPeriod(LocalDateTime.now());
+         fineExpenseDTO.setType(fineEntity.getSanctionType().getPriceType());
+         fineExpenseDTO.setLotId(fineEntity.getPlotId());
+
+        try {
+            expensesClient.sendToExpenses(fineExpenseDTO);
+        } catch (WebClientException e) {
+            throw new ExpensesClientException("Error when sending fine to expenses: " + e.getMessage(), e);
+        }
+
+
+     }
+
+
 }
+
+
+
+

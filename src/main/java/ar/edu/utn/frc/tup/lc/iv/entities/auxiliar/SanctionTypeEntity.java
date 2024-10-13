@@ -38,10 +38,10 @@ public class SanctionTypeEntity extends BaseEntity {
     private String description;
 
     /**
-     * The validity period (in days) for which the sanction is active.
+     * A price type associated with the fine.
      */
-    @Column(name = "VALIDITY_PERIOD")
-    private Integer validityPeriod;
+    @Column(name = "PRICE_TYPE")
+    private String priceType;
 
     /**
      * The monetary price associated with the sanction.

@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
+import ar.edu.utn.frc.tup.lc.iv.controllers.api_response.ApiResponseConstants;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
@@ -19,10 +21,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 
@@ -58,15 +61,15 @@ public class FineController {
             description = "Get all fines")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
-                            schema = @Schema(implementation = Page.class)
+                            schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -91,15 +94,15 @@ public class FineController {
             description = "Get fine by id")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
-                            schema = @Schema(implementation = FineDTO.class)
+                            schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -122,8 +125,8 @@ public class FineController {
             description = "Post  fine")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful operation",
+                    responseCode = ApiResponseConstants.OK,
+                    description = ApiResponseConstants.OK_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = FineDTO.class)
                     )
@@ -136,8 +139,8 @@ public class FineController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
                     content = @Content(
                             schema = @Schema(implementation = ErrorApi.class))
             )
@@ -149,5 +152,45 @@ public class FineController {
         return new ResponseEntity<>(fineService.postFine(fineDTO), HttpStatus.OK);
     }
 
+
+
+    /**
+     * Update the state of a fine.
+     * This endpoint allows updating the state of an existing fine.
+     *
+     * @param fineDTO the DTO containing the fine id and the new state to update
+     * @return ResponseEntity containing the updated FineDTO
+     * and an HTTP status code of 200 (OK)
+     */
+    @Operation(
+            summary = "Update fine state",
+            description = "Update the state of a fine by providing the fine ID and the new state"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = ApiResponseConstants.OK,
+                    description = "Fine state updated successfully",
+                    content = @Content(
+                            schema = @Schema(implementation = FineDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request, invalid input or state transition",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorApi.class))
+            ),
+            @ApiResponse(
+                    responseCode = ApiResponseConstants.INTERNAL_SERVER_ERROR,
+                    description = ApiResponseConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorApi.class))
+            )
+    })
+    @PutMapping("/fine/state")
+    public ResponseEntity<FineDTO> updateFineState(@RequestBody FineUpdateStateDTO fineDTO) {
+        System.out.println(fineDTO);
+        return ResponseEntity.ok(fineService.updateFineState(fineDTO));
+    }
 
 }

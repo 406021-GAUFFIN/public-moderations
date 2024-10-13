@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.advice;
 
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
+import ar.edu.utn.frc.tup.lc.iv.error.ExpensesClientException;
 import ar.edu.utn.frc.tup.lc.iv.error.InvalidClaimStateException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
@@ -114,6 +115,50 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(InvalidClaimStateException.class)
     public ResponseEntity<ErrorApi> handleInvalidClaimStateException(InvalidClaimStateException ex) {
+        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+
+        ErrorApi error = ErrorApi.builder()
+                .timestamp(timeStamp)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles IllegalArgumentException and returns a BAD_REQUEST
+     * response with error details.
+     *
+     * @param ex the IllegalArgumentException thrown
+     * @return a ResponseEntity containing an ErrorApi with
+     * BAD_REQUEST status and the exception message
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorApi> handleIllegalArgumentException(IllegalArgumentException ex) {
+        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+
+        ErrorApi error = ErrorApi.builder()
+                .timestamp(timeStamp)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles ExpensesClientException and returns a BAD_REQUEST
+     * response with error details.
+     *
+     * @param ex the ExpensesClientException thrown
+     * @return a ResponseEntity containing an ErrorApi with
+     * BAD_REQUEST status and the exception message
+     */
+    @ExceptionHandler(ExpensesClientException.class)
+    public ResponseEntity<ErrorApi> handleIllegalArgumentException(ExpensesClientException ex) {
         String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 
         ErrorApi error = ErrorApi.builder()

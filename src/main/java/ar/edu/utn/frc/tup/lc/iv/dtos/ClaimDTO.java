@@ -2,6 +2,7 @@ package ar.edu.utn.frc.tup.lc.iv.dtos;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ClaimState;
 
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.SanctionTypeDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -9,7 +9,7 @@ import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

@@ -9,13 +9,14 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.external.PlotDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.claim.ClaimEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
-import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
+
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.infraction.InfractionJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.InfractionService;
-import ar.edu.utn.frc.tup.lc.iv.services.SanctionTypeService;
+
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,19 +28,35 @@ import java.util.Optional;
  * Service to manage infractions.
  */
 @Service
+@RequiredArgsConstructor
 public class InfractionServiceImpl implements InfractionService {
 
+    /**
+     * infraction repository to save them.
+     */
     @Autowired
     private InfractionJpaRepository infractionJpaRepository;
 
+    /**
+     * sanction repo to look for them.
+     */
     @Autowired
     private SanctionTypeJpaRepository sanctionTypeJpaRepository;
 
+    /**
+     * claim repository to take the entities out.
+     */
     @Autowired
     private ClaimJpaRepository claimJpaRepository;
 
+    /**
+     * cadastre client to check if plot exists.
+     */
     @Autowired
     private CadastreClient cadastreClient;
+    /**
+     * model mapper.
+     */
     @Autowired
     private ModelMapper modelMapper;
 
@@ -62,7 +79,7 @@ public class InfractionServiceImpl implements InfractionService {
 
         //check the sanction type is valid
         SanctionTypeEntity sanctionTypeEntity = sanctionTypeJpaRepository.findById(dto.getSanctionTypeId())
-                .orElseThrow(()-> new EntityNotFoundException("Sanction Type not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Sanction Type not found"));
 
 
 
@@ -75,10 +92,9 @@ public class InfractionServiceImpl implements InfractionService {
 
 
         //add all the claims into the infraction
-        //todo: agregar una validacion para que no agrege reclamos que ya estan en otra infraccion O manejarlo del front que no mande nunca un reclamo ya infraccionado,de todas maneras esto no esta en la user story actual
         for (int i = 0; i < dto.getClaimsId().size(); i++) {
             Optional<ClaimEntity> claimEntityOptional = claimJpaRepository.findById(dto.getClaimsId().get(i));
-            if (claimEntityOptional.isPresent()){
+            if (claimEntityOptional.isPresent()) {
                 //this adds the claims into the infraction
                 ClaimEntity claimEntity = claimEntityOptional.get();
                 infractionEntity.getClaims().add(claimEntity);

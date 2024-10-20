@@ -1,9 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
 import ar.edu.utn.frc.tup.lc.iv.controllers.api_response.ApiResponseConstants;
-import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
+
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateInfractionDto;
-import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
+
 import ar.edu.utn.frc.tup.lc.iv.dtos.InfractionDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.ErrorApi;
 import ar.edu.utn.frc.tup.lc.iv.services.InfractionService;
@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/infractions")
 public class InfractionController {
 
+    /**
+     * Infraction service to use the methods inside it to return the correct dto.
+     */
     @Autowired
     private InfractionService service;
 
@@ -60,7 +63,7 @@ public class InfractionController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<InfractionDTO> postInfraction(@RequestBody CreateInfractionDto dto){
+    public ResponseEntity<InfractionDTO> postInfraction(@RequestBody CreateInfractionDto dto) {
         return ResponseEntity.ok(service.postInfraction(dto));
     }
 }

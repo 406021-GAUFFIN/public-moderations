@@ -15,9 +15,9 @@ public enum InfractionState {
     ON_APPEALING,
 
     /**
-     * The infraction has been appealed.
+     * The infraction has been created and can be contested by the infractor.
      */
-    APPEALED,
+    CREATED,
 
     /**
      * The infraction has been rejected.

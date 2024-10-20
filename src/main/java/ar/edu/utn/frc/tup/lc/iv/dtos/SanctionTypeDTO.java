@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SanctionTypeDTO extends BaseDTO {
+public class SanctionTypeDTO  {
 
 
     /**

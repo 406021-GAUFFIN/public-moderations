@@ -9,7 +9,7 @@ import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -67,7 +67,7 @@ public class InfractionEntity extends BaseEntity {
     /**
      * The type of sanction associated with the infraction.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
     private SanctionTypeEntity sanctionTypeEntity;
 
@@ -90,8 +90,5 @@ public class InfractionEntity extends BaseEntity {
      */
     @OneToMany(mappedBy = "infraction", cascade = CascadeType.ALL)
     private List<ProofEntity> proofs;
-
-
-
 
 }

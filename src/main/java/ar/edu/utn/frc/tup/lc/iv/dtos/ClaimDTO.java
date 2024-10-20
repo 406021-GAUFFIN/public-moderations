@@ -1,7 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iv.dtos;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ClaimState;
-import ar.edu.utn.frc.tup.lc.iv.models.SanctionType;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +33,7 @@ public class ClaimDTO extends BaseDTO {
     /**
      * The type of sanction related to the claim.
      */
-    private SanctionType sanctionType;
+    private SanctionTypeDTO sanctionType;
 
     /**
      * The current state of the claim, represented by {@link ClaimState}.
@@ -41,7 +41,7 @@ public class ClaimDTO extends BaseDTO {
     private ClaimState claimState;
 
     /**
-     * The infraction associated with the claim.
+     * The infraction id associated with the claim.
      */
-    private InfractionDTO infraction;
+    private Long infractionId;
 }

@@ -1,6 +1,5 @@
 package ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.BaseDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ChargeType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

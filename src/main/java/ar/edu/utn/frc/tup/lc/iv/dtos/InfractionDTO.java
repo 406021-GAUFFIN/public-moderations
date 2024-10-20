@@ -37,7 +37,7 @@ public class InfractionDTO extends BaseDTO {
     /**
      * The type of sanction associated with the infraction.
      */
-    private SanctionType sanctionType;
+    private SanctionTypeDTO sanctionType;
 
     /**
      * The list of claims related to the infraction.

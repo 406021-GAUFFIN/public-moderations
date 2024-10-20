@@ -52,7 +52,7 @@ public class ClaimEntity extends BaseEntity {
     /**
      * The type of sanction related to the claim.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
     private SanctionTypeEntity sanctionTypeEntity;
 

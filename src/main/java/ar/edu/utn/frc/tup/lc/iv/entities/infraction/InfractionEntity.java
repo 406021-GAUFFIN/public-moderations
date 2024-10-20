@@ -67,7 +67,7 @@ public class InfractionEntity extends BaseEntity {
     /**
      * The type of sanction associated with the infraction.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
     private SanctionTypeEntity sanctionTypeEntity;
 
@@ -90,8 +90,5 @@ public class InfractionEntity extends BaseEntity {
      */
     @OneToMany(mappedBy = "infraction", cascade = CascadeType.ALL)
     private List<ProofEntity> proofs;
-
-
-
 
 }

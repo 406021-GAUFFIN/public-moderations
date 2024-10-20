@@ -33,7 +33,7 @@ public class ClaimDTO extends BaseDTO {
     /**
      * The type of sanction related to the claim.
      */
-    private SanctionType sanctionType;
+    private SanctionTypeDTO sanctionType;
 
     /**
      * The current state of the claim, represented by {@link ClaimState}.
@@ -41,7 +41,7 @@ public class ClaimDTO extends BaseDTO {
     private ClaimState claimState;
 
     /**
-     * The infraction associated with the claim.
+     * The infraction id associated with the claim.
      */
-    private InfractionDTO infraction;
+    private Long infractionId;
 }

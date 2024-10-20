@@ -7,6 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
+/**
+ * DTO for the creation of the infraction.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

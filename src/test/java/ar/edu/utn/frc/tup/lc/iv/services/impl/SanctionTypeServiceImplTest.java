@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ChargeType;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.UpdateSanctionTypeDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,4 +94,37 @@ public class SanctionTypeServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> sanctionTypeService.getById(id));
     }
+
+    @Test
+    public void testUpdateSanctionTypeFound() {
+        Long id = 1L;
+        UpdateSanctionTypeDTO updateDTO = new UpdateSanctionTypeDTO();
+        updateDTO.setUserId(1L);
+        updateDTO.setChargeType(ChargeType.FIXED);
+        updateDTO.setAmount(150.0);
+        updateDTO.setDescription("Updated Description");
+
+        SanctionTypeEntity entity = new SanctionTypeEntity();
+        entity.setId(id);
+        SanctionTypeDTO dto = new SanctionTypeDTO();
+
+        when(sanctionTypeJpaRepository.findById(id)).thenReturn(Optional.of(entity));
+        when(modelMapper.map(any(), any())).thenReturn(dto);
+        when(sanctionTypeJpaRepository.save(any(SanctionTypeEntity.class))).thenReturn(entity);
+
+        SanctionTypeDTO result = sanctionTypeService.update(id, updateDTO);
+        assertEquals(dto, result);
+    }
+
+    @Test
+    public void testUpdateSanctionTypeNotFound() {
+        Long id = 1L;
+        UpdateSanctionTypeDTO updateDTO = new UpdateSanctionTypeDTO();
+        updateDTO.setUserId(1L);
+
+        when(sanctionTypeJpaRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> sanctionTypeService.update(id, updateDTO));
+    }
+
 }

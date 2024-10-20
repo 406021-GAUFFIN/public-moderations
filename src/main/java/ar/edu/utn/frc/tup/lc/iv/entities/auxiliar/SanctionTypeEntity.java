@@ -1,9 +1,13 @@
 package ar.edu.utn.frc.tup.lc.iv.entities.auxiliar;
 
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ChargeType;
 import ar.edu.utn.frc.tup.lc.iv.entities.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,12 +44,13 @@ public class SanctionTypeEntity extends BaseEntity {
     /**
      * A price type associated with the fine.
      */
-    @Column(name = "PRICE_TYPE")
-    private String priceType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "CHARGE_TYPE")
+    private ChargeType chargeType;
 
     /**
-     * The monetary price associated with the sanction.
+     * The amount to be charged base on the charge type.
      */
-    @Column(name = "PRICE")
-    private Double price;
+    @Column(name = "AMOUNT")
+    private Double amount;
 }

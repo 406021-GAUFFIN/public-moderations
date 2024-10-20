@@ -41,5 +41,18 @@ public class UpdateSanctionTypeDTO {
      */
     private Double amount;
 
+    /**
+     * Amounts of days for the infraction to expire.
+     */
+    @JsonProperty("infraction_days_to_expire")
+    private Integer infractionDaysToExpire;
+
+    /**
+     * Amounts of infractions for a fine to be created.
+     */
+    @JsonProperty("amount_of_infractions_for_fine")
+    private Integer amountOfInfractionsForFine;
+
+
 }
 

@@ -7,7 +7,7 @@ import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.proof.ProofEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -52,7 +52,7 @@ public class ClaimEntity extends BaseEntity {
     /**
      * The type of sanction related to the claim.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "SANCTION_TYPE", referencedColumnName = "id")
     private SanctionTypeEntity sanctionTypeEntity;
 

@@ -1,7 +1,7 @@
 package ar.edu.utn.frc.tup.lc.iv.dtos;
 
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.InfractionState;
-import ar.edu.utn.frc.tup.lc.iv.models.SanctionType;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +37,7 @@ public class InfractionDTO extends BaseDTO {
     /**
      * The type of sanction associated with the infraction.
      */
-    private SanctionType sanctionType;
+    private SanctionTypeDTO sanctionType;
 
     /**
      * The list of claims related to the infraction.

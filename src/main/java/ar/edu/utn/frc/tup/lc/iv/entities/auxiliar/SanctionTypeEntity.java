@@ -53,4 +53,16 @@ public class SanctionTypeEntity extends BaseEntity {
      */
     @Column(name = "AMOUNT")
     private Double amount;
+
+    /**
+     * Amounts of days for the infraction to expire.
+     */
+    @Column(name = "INFRACTION_DAYS_TO_EXPIRE")
+    private Integer infractionDaysToExpire;
+
+    /**
+     * Amounts of infractions for a fine to be created.
+     */
+    @Column(name = "AMOUNT_OF_INFRACTION_FOR_FINE")
+    private Integer amountOfInfractionsForFine;
 }

@@ -93,6 +93,7 @@ public class FineServiceImplTest {
         CreateFineDTO createFineDTO = new CreateFineDTO();
         createFineDTO.setSanctionTypeId(1L);
         createFineDTO.setPlotId(1L);
+        createFineDTO.setInfractions(List.of());
 
         CreateFineDTO createFineDTOError = new CreateFineDTO();
         createFineDTOError.setSanctionTypeId(1L);

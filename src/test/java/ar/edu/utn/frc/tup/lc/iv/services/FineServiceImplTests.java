@@ -4,6 +4,7 @@ package ar.edu.utn.frc.tup.lc.iv.services;
 import ar.edu.utn.frc.tup.lc.iv.clients.ExpensesClient;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.FineUpdateStateDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ChargeType;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.FineState;
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
@@ -228,7 +229,10 @@ public class FineServiceImplTests {
         existingFine.setId(fineId);
         existingFine.setFineState(FineState.ON_ASSEMBLY);
         SanctionTypeEntity sanctionType = new SanctionTypeEntity();
-        sanctionType.setPrice(100.0);
+        sanctionType.setAmount(100.0);
+        sanctionType.setName("sanction type");
+        sanctionType.setId(1L);
+        sanctionType.setChargeType(ChargeType.FIXED);
         existingFine.setSanctionType(sanctionType);
 
 

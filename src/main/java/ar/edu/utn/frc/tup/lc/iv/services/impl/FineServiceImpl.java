@@ -177,10 +177,10 @@ public class FineServiceImpl implements FineService {
 
      private void sendFineToExpense(FineEntity fineEntity) {
          FineExpenseDTO fineExpenseDTO = new FineExpenseDTO();
-         fineExpenseDTO.setAmount(fineEntity.getSanctionType().getPrice());
+         fineExpenseDTO.setAmount(fineEntity.getSanctionType().getAmount());
          fineExpenseDTO.setFineId(fineEntity.getId());
          fineExpenseDTO.setPeriod(LocalDateTime.now());
-         fineExpenseDTO.setType(fineEntity.getSanctionType().getPriceType());
+         fineExpenseDTO.setType(fineEntity.getSanctionType().getChargeType().toString());
          fineExpenseDTO.setLotId(fineEntity.getPlotId());
 
         try {

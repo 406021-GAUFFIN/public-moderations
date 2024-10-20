@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.CreateSanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.UpdateSanctionTypeDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.services.SanctionTypeService;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,7 +75,6 @@ public class SanctionTypeServiceImpl implements SanctionTypeService {
     /**
      * Get one sanction type by id.
      * @param id of the sanction type to get
-     *
      * @return canction type dto
      */
 
@@ -85,6 +87,50 @@ public class SanctionTypeServiceImpl implements SanctionTypeService {
         }
 
         return modelMapper.map(sanctionTypeEntity.get(), SanctionTypeDTO.class);
+    }
+
+    /**
+     * Create sanction type.
+     * @param createSanctionTypeDTO of the sanction type to create
+     * @return creation type dto
+     */
+    @Override
+    public SanctionTypeDTO postSanctionType(CreateSanctionTypeDTO createSanctionTypeDTO) {
+
+        SanctionTypeEntity sanctionTypeEntity = new SanctionTypeEntity();
+
+        sanctionTypeEntity.setCreatedBy(createSanctionTypeDTO.getUserId());
+        sanctionTypeEntity.setLastUpdatedBy(createSanctionTypeDTO.getUserId());
+        sanctionTypeEntity.setCreatedDate(LocalDateTime.now());
+        sanctionTypeEntity.setLastUpdatedAt(LocalDateTime.now());
+        sanctionTypeEntity.setName(createSanctionTypeDTO.getName());
+        sanctionTypeEntity.setDescription(createSanctionTypeDTO.getDescription());
+        sanctionTypeEntity.setAmount(createSanctionTypeDTO.getAmount());
+        sanctionTypeEntity.setChargeType(createSanctionTypeDTO.getChargeType());
+
+        return modelMapper.map(sanctionTypeJpaRepository.save(sanctionTypeEntity), SanctionTypeDTO.class);
+    }
+
+    /**
+     * Create sanction type.
+     * @param id of the sanction type to edit
+     * @param  updateSanctionTypeDTO of the sanction type to update
+     * @return sanction type dto
+     */
+    @Override
+    public SanctionTypeDTO update(Long id, UpdateSanctionTypeDTO updateSanctionTypeDTO) {
+        SanctionTypeEntity sanctionTypeEntity = sanctionTypeJpaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Sanction Type not found"));
+
+        sanctionTypeEntity.setLastUpdatedBy(updateSanctionTypeDTO.getUserId());
+        sanctionTypeEntity.setLastUpdatedAt(LocalDateTime.now());
+        sanctionTypeEntity.setChargeType(updateSanctionTypeDTO.getChargeType());
+        sanctionTypeEntity.setAmount(updateSanctionTypeDTO.getAmount());
+        sanctionTypeEntity.setDescription(updateSanctionTypeDTO.getDescription());
+
+        return modelMapper.map(sanctionTypeJpaRepository.save(sanctionTypeEntity), SanctionTypeDTO.class);
+
+
     }
 
 }

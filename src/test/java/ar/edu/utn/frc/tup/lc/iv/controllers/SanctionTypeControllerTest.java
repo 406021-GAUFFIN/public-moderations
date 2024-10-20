@@ -1,6 +1,8 @@
 package ar.edu.utn.frc.tup.lc.iv.controllers;
 
-import ar.edu.utn.frc.tup.lc.iv.dtos.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.CreateSanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.SanctionTypeDTO;
+import ar.edu.utn.frc.tup.lc.iv.dtos.sanctionType.UpdateSanctionTypeDTO;
 import ar.edu.utn.frc.tup.lc.iv.services.SanctionTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,6 +68,30 @@ public class SanctionTypeControllerTest {
         when(sanctionTypeService.getById(1L)).thenReturn(sanctionTypeDTO);
 
         ResponseEntity<SanctionTypeDTO> response = sanctionTypeController.getSanctionTypeById(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(sanctionTypeDTO, response.getBody());
+    }
+
+    @Test
+    public void testPostSanctionType() {
+        SanctionTypeDTO sanctionTypeDTO = new SanctionTypeDTO();
+
+        when(sanctionTypeService.postSanctionType(any())).thenReturn(sanctionTypeDTO);
+
+        ResponseEntity<SanctionTypeDTO> response = sanctionTypeController.createSanctionType(new CreateSanctionTypeDTO());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(sanctionTypeDTO, response.getBody());
+    }
+
+    @Test
+    public void testPutSanctionType() {
+        SanctionTypeDTO sanctionTypeDTO = new SanctionTypeDTO();
+
+        when(sanctionTypeService.update(any(),any())).thenReturn(sanctionTypeDTO);
+
+        ResponseEntity<SanctionTypeDTO> response = sanctionTypeController.updateSanctionType(1L, new UpdateSanctionTypeDTO());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(sanctionTypeDTO, response.getBody());

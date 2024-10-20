@@ -1,8 +1,8 @@
-INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, price_type, price) VALUES
-(999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Ruidos molestos', 'Ruidos molesos', 'porcentage', 35000);
+INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, CHARGE_TYPE, amount) VALUES
+(999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Ruidos molestos', 'Ruidos molestos', 'FIXED', 35000);
 
-INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, price_type, price) VALUES
-    (1000, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Egreso tardío', 'Egreso tardío', 'porcentage', 35000);
+INSERT INTO sanction_type (id, created_by, created_date, last_updated_at , last_updated_by , description, name, CHARGE_TYPE, amount) VALUES
+    (1000, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'Egreso tardío', 'Egreso tardío', 'PROPORTIONAL', 1);
 
 INSERT INTO fine (id , created_by, created_date , last_updated_at , last_updated_by,  fine_state ,  plot_id , sanction_type )VALUES
     (999, 1, '2024-06-12 10:00:00', '2024-06-12 10:00:00', 1, 'ON_ASSEMBLY',  1, 999);

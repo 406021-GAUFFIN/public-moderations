@@ -107,6 +107,8 @@ public class SanctionTypeServiceImpl implements SanctionTypeService {
         sanctionTypeEntity.setDescription(createSanctionTypeDTO.getDescription());
         sanctionTypeEntity.setAmount(createSanctionTypeDTO.getAmount());
         sanctionTypeEntity.setChargeType(createSanctionTypeDTO.getChargeType());
+        sanctionTypeEntity.setAmountOfInfractionsForFine(createSanctionTypeDTO.getAmountOfInfractionsForFine());
+        sanctionTypeEntity.setInfractionDaysToExpire(createSanctionTypeDTO.getInfractionDaysToExpire());
 
         return modelMapper.map(sanctionTypeJpaRepository.save(sanctionTypeEntity), SanctionTypeDTO.class);
     }
@@ -127,6 +129,9 @@ public class SanctionTypeServiceImpl implements SanctionTypeService {
         sanctionTypeEntity.setChargeType(updateSanctionTypeDTO.getChargeType());
         sanctionTypeEntity.setAmount(updateSanctionTypeDTO.getAmount());
         sanctionTypeEntity.setDescription(updateSanctionTypeDTO.getDescription());
+        sanctionTypeEntity.setInfractionDaysToExpire(updateSanctionTypeDTO.getInfractionDaysToExpire());
+        sanctionTypeEntity.setAmountOfInfractionsForFine(updateSanctionTypeDTO.getAmountOfInfractionsForFine());
+
 
         return modelMapper.map(sanctionTypeJpaRepository.save(sanctionTypeEntity), SanctionTypeDTO.class);
 

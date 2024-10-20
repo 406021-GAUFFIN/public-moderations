@@ -1,7 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iv.services.impl;
 
 import ar.edu.utn.frc.tup.lc.iv.clients.CadastreClient;
+import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateInfractionDto;
+import ar.edu.utn.frc.tup.lc.iv.dtos.FineDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.InfractionDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.InfractionState;
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.PlotDTO;
@@ -13,6 +15,7 @@ import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.claim.ClaimJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.infraction.InfractionJpaRepository;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.sanctionType.SanctionTypeJpaRepository;
+import ar.edu.utn.frc.tup.lc.iv.services.FineService;
 import ar.edu.utn.frc.tup.lc.iv.services.InfractionService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -21,7 +24,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,6 +37,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class InfractionServiceImpl implements InfractionService {
 
+    /**
+     *  Fine service.
+     */
+    @Autowired
+    private FineService fineService;
     /**
      * infraction repository to save them.
      */
@@ -111,6 +122,32 @@ public class InfractionServiceImpl implements InfractionService {
 
         result.setSanctionType(modelMapper.map(sanctionTypeEntity, SanctionTypeDTO.class));
 
+        FineDTO generatedFine =  generateFine(infractionEntity.getPlotId(), infractionEntity.getSanctionTypeEntity());
+        result.setFine(generatedFine);
         return result;
+    }
+
+    private FineDTO generateFine(Long plotId, SanctionTypeEntity sanctionTypeEntity) {
+        LocalDateTime cutoffDate = LocalDate.now()
+                .minusDays(sanctionTypeEntity.getInfractionDaysToExpire())
+                .atStartOfDay();
+        List<InfractionEntity> validPlotInfractions = infractionJpaRepository.getValidPendingInfractions(plotId,
+                                                                                                        sanctionTypeEntity,
+                                                                                                        cutoffDate);
+
+        if (validPlotInfractions == null || validPlotInfractions.isEmpty()) {
+            return null;
+        }
+
+        if (validPlotInfractions.size() < sanctionTypeEntity.getAmountOfInfractionsForFine()) {
+            return null;
+        }
+
+        CreateFineDTO createFineDTO = new CreateFineDTO(plotId, sanctionTypeEntity.getId(), validPlotInfractions);
+
+
+        return fineService.postFine(createFineDTO);
+
+
     }
 }

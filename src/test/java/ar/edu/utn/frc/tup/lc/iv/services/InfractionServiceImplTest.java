@@ -67,6 +67,8 @@ public class InfractionServiceImplTest {
         sanctionTypeEntity = new SanctionTypeEntity();
         sanctionTypeEntity.setId(1L);
         sanctionTypeEntity.setName("Sanction Type");
+        sanctionTypeEntity.setAmountOfInfractionsForFine(6);
+        sanctionTypeEntity.setInfractionDaysToExpire(6);
 
         plotDTO = new PlotDTO();
         plotDTO.setId(1L);

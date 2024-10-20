@@ -1,5 +1,6 @@
 package ar.edu.utn.frc.tup.lc.iv.models;
 
+import ar.edu.utn.frc.tup.lc.iv.dtos.common.enums.ChargeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,16 @@ public class SanctionType extends BaseModel {
      */
     private String description;
 
+    /**
+     * A price type associated with the fine.
+     */
+    private ChargeType chargeType;
 
+    /**
+     * The amount to be charged base on the charge type.
+     */
+    private Double amount;
 }
+
+
+

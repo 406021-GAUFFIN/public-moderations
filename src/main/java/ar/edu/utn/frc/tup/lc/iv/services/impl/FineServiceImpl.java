@@ -10,6 +10,7 @@ import ar.edu.utn.frc.tup.lc.iv.dtos.external.FineExpenseDTO;
 import ar.edu.utn.frc.tup.lc.iv.dtos.external.PlotDTO;
 import ar.edu.utn.frc.tup.lc.iv.entities.auxiliar.SanctionTypeEntity;
 import ar.edu.utn.frc.tup.lc.iv.entities.fine.FineEntity;
+import ar.edu.utn.frc.tup.lc.iv.entities.infraction.InfractionEntity;
 import ar.edu.utn.frc.tup.lc.iv.error.ExpensesClientException;
 import ar.edu.utn.frc.tup.lc.iv.dtos.CreateFineDTO;
 import ar.edu.utn.frc.tup.lc.iv.repositories.jpa.fine.FineJpaRepository;
@@ -129,6 +130,10 @@ public class FineServiceImpl implements FineService {
         fineEntity.setPlotId(createFineDTO.getPlotId());
         fineEntity.setFineState(FineState.ON_ASSEMBLY);
         fineEntity.setSanctionType(sanctionTypeEntity);
+        fineEntity.setInfractions(createFineDTO.getInfractions());
+        for (InfractionEntity infraction : createFineDTO.getInfractions()) {
+            infraction.setFine(fineEntity);
+        }
         fineEntity = fineJpaRepository.save(fineEntity);
         return modelMapper.map(fineJpaRepository.save(fineEntity), FineDTO.class);
 
